@@ -1,0 +1,21 @@
+{
+  "titulo": "Clínica Patas & Cia",
+  "contexto": "Uma clínica veterinária pequena: três computadores, um servidor no armário com o sistema de agendamento e prontuários, Wi-Fi do roteador da operadora e uma recepcionista que também cuida das redes sociais.",
+  "instrucoes": "Classifique cada item. Arraste para a coluna, ou selecione com Enter (ou toque) e escolha a coluna.",
+  "colunas": [
+    { "id": "ativo", "rotulo": "Ativo", "descricao": "O que tem valor e precisa ser protegido" },
+    { "id": "ameaca", "rotulo": "Ameaça", "descricao": "O que pode causar dano" },
+    { "id": "vulnerabilidade", "rotulo": "Vulnerabilidade", "descricao": "A fraqueza que a ameaça explora" },
+    { "id": "risco", "rotulo": "Risco", "descricao": "A chance de a ameaça explorar a fraqueza, e o tamanho do estrago" }
+  ],
+  "itens": [
+    { "id": "i1", "texto": "Prontuários dos animais e cadastro dos tutores", "coluna": "ativo", "explicacao": "São os dados que a clínica não pode perder nem deixar vazar (inclusive por causa da LGPD)." },
+    { "id": "i2", "texto": "Roteador da operadora com a senha de administração de fábrica", "coluna": "vulnerabilidade", "explicacao": "Senha padrão é uma fraqueza conhecida que um atacante pode explorar." },
+    { "id": "i3", "texto": "Ransomware que chega por e-mail", "coluna": "ameaca", "explicacao": "É o agente que causa o dano." },
+    { "id": "i4", "texto": "Backup feito num HD que fica sempre plugado no servidor", "coluna": "vulnerabilidade", "explicacao": "Um ransomware que atinja o servidor criptografa o HD junto. O backup existe, mas está exposto." },
+    { "id": "i5", "texto": "Grande chance de a clínica ficar dias sem agenda e sem prontuários se um ransomware chegar", "coluna": "risco", "explicacao": "Risco junta a ameaça, a vulnerabilidade e o impacto. É o que você avalia para decidir o que proteger primeiro." },
+    { "id": "i6", "texto": "Perfil da clínica no Instagram", "coluna": "ativo", "explicacao": "A reputação e o canal com os clientes também têm valor." },
+    { "id": "i7", "texto": "Golpista que tenta roubar a conta do Instagram por mensagem falsa", "coluna": "ameaca", "explicacao": "É quem pode causar o dano, usando engenharia social." },
+    { "id": "i8", "texto": "Mesma senha usada no Instagram e no e-mail da clínica, sem verificação em duas etapas", "coluna": "vulnerabilidade", "explicacao": "Se uma senha vaza, as duas contas caem juntas." }
+  ]
+}

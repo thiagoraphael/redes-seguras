@@ -1,0 +1,53 @@
+---
+/**
+ * Caso real com fonte, para a teoria da Defensiva.
+ * Props: titulo, veiculo (quem publicou), data (texto livre, ex.: "nov. 2020"), url.
+ * O corpo do caso vai no slot.
+ */
+interface Props {
+  titulo: string;
+  veiculo: string;
+  data: string;
+  url: string;
+}
+const { titulo, veiculo, data, url } = Astro.props;
+---
+<aside class="caso-real">
+  <p class="cr-rotulo">Caso real no Brasil</p>
+  <p class="cr-titulo">{titulo}</p>
+  <div class="cr-corpo"><slot /></div>
+  <p class="cr-fonte">
+    Fonte: <a href={url} rel="noopener" target="_blank">{veiculo}</a>, {data}.
+  </p>
+</aside>
+
+<style>
+  .caso-real {
+    background: var(--cor-defensiva-suave);
+    border: 1px solid var(--cor-borda);
+    border-left: 5px solid var(--cor-defensiva);
+    border-radius: var(--raio-sm);
+    padding: var(--esp-3) var(--esp-4);
+    margin: var(--esp-4) 0;
+  }
+  .cr-rotulo {
+    font-size: var(--tam-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--cor-defensiva);
+    margin: 0;
+  }
+  .cr-titulo {
+    font-weight: 700;
+    margin: 0 0 var(--esp-2);
+  }
+  .cr-corpo :global(p:last-child) {
+    margin-bottom: var(--esp-2);
+  }
+  .cr-fonte {
+    font-size: var(--tam-sm);
+    color: var(--cor-texto-suave);
+    margin: 0;
+  }
+</style>

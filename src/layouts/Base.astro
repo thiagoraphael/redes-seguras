@@ -1,0 +1,146 @@
+---
+import '@/styles/global.css';
+import ToggleTema from '@/components/ui/ToggleTema.astro';
+import { url } from '@/lib/url';
+
+interface Props {
+  titulo: string;
+  descricao?: string;
+}
+const { titulo, descricao = 'Estudo e prática de segurança de redes para o Técnico em Redes de Computadores.' } = Astro.props;
+const nomeSite = 'Redes Seguras';
+const tituloCompleto = titulo === nomeSite ? nomeSite : `${titulo} | ${nomeSite}`;
+const caminho = Astro.url.pathname;
+const ativo = (p: string) => caminho.startsWith(url(p));
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descricao} />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('site-redes:tema');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topo">
+      <div class="container topo-interno">
+        <a class="marca" href={url()}>
+          <img src={url('favicon.svg')} alt="" width="28" height="28" />
+          <span>{nomeSite}</span>
+        </a>
+        <nav aria-label="Principal">
+          <ul>
+            <li><a href={url('ferramentas/')} aria-current={ativo('ferramentas') ? 'page' : undefined}>Ferramentas</a></li>
+            <li><a href={url('defensiva/')} aria-current={ativo('defensiva') ? 'page' : undefined}>Defensiva</a></li>
+          </ul>
+        </nav>
+        <ToggleTema />
+      </div>
+    </header>
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="rodape">
+      <div class="container">
+        <p>
+          Material de estudo do Técnico em Redes de Computadores, CTP Barbacena. Nada aqui vale nota:
+          o progresso fica só neste navegador.
+        </p>
+        <p><a href={url('professor/componentes/')}>Demonstração dos componentes (para o professor)</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .topo {
+    background: var(--cor-superficie);
+    border-bottom: 1px solid var(--cor-borda);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .topo-interno {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-4);
+    min-height: 3.75rem;
+  }
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--esp-2);
+    font-weight: 700;
+    font-size: var(--tam-lg);
+    color: var(--cor-texto);
+    text-decoration: none;
+    margin-right: auto;
+  }
+  nav ul {
+    display: flex;
+    gap: var(--esp-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    display: block;
+    padding: var(--esp-2) var(--esp-3);
+    border-radius: var(--raio-sm);
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--tam-sm);
+  }
+  nav a:hover {
+    background: var(--cor-superficie-2);
+  }
+  nav a[aria-current='page'] {
+    background: var(--cor-destaque-suave);
+    color: var(--cor-destaque);
+  }
+  main:focus {
+    outline: none;
+  }
+  .rodape {
+    margin-top: var(--esp-7);
+    border-top: 1px solid var(--cor-borda);
+    padding: var(--esp-5) 0;
+    font-size: var(--tam-sm);
+    color: var(--cor-texto-suave);
+  }
+  .rodape p {
+    margin: 0 0 var(--esp-2);
+  }
+  .marca span {
+    white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .marca span {
+      font-size: var(--tam-md);
+    }
+    nav a {
+      padding: var(--esp-2);
+    }
+    .topo-interno {
+      gap: var(--esp-2);
+    }
+  }
+  @media (max-width: 420px) {
+    .marca span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+  }
+</style>

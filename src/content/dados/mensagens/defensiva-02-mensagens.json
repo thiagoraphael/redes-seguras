@@ -1,0 +1,81 @@
+{
+  "titulo": "Golpe ou legítima?",
+  "instrucoes": "Todas as empresas e pessoas aqui são fictícias. Os endereços terminam em .example, que é reservado e não existe de verdade.",
+  "mensagens": [
+    {
+      "id": "taxa-entrega",
+      "canal": "sms",
+      "remetente": { "nome": "29110", "numero": "SMS curto" },
+      "hora": "10:42",
+      "blocos": [
+        { "id": "b1", "texto": "RAPIDO TUCANO: Ana, sua encomenda foi retida na fiscalizacao.", "nota": "Usar seu nome não prova nada: vazamentos de dados com nome e telefone são comuns." },
+        { "id": "b2", "texto": "Para liberar, pague a taxa de R$ 39,90 ate HOJE as 23h59." },
+        { "id": "b3", "texto": "rapidotucano-liberacao.example/pagar", "link": { "exibido": "rapidotucano-liberacao.example/pagar", "real": "rapidotucano-liberacao.example/pagar" } },
+        { "id": "b4", "texto": "Apos o prazo o objeto sera devolvido ao remetente." }
+      ],
+      "veredito": "golpe",
+      "sinais": [
+        { "bloco": "b2", "titulo": "Cobrança com urgência", "explicacao": "Prazo curto (\"até hoje\") é para você não parar para pensar." },
+        { "bloco": "b3", "titulo": "Link fora do site oficial", "explicacao": "O endereço tem o nome da empresa com palavras a mais. O site oficial seria só rapidotucano.example. Digite o endereço você mesmo para consultar o rastreio." },
+        { "bloco": "b4", "titulo": "Ameaça de perda", "explicacao": "Reforça a pressão: se não pagar agora, perde a compra." }
+      ],
+      "explicacao": "É o mesmo padrão do golpe da falsa taxa dos Correios: SMS, encomenda retida, taxa pequena, link falso e Pix. Uma taxa real aparece no site oficial da transportadora ou dos Correios, não num link de SMS.",
+      "fonte": { "titulo": "WeLiveSecurity: golpe da falsa taxa via SMS", "url": "https://www.welivesecurity.com/pt/golpes-fraudes/golpe-dos-correios-saiba-como-se-proteger-da-falsa-taxa-de-importacao-enviada-via-sms/" }
+    },
+    {
+      "id": "filho-numero-novo",
+      "canal": "whatsapp",
+      "remetente": { "nome": "Desconhecido", "numero": "+55 32 9••••-4821" },
+      "hora": "21:47",
+      "blocos": [
+        { "id": "b1", "texto": "Oi mãe, troquei de número, salva esse aqui" },
+        { "id": "b2", "texto": "Meu app do banco travou, consegue fazer um Pix pra mim? Te devolvo amanhã cedo" },
+        { "id": "b3", "texto": "É pra pagar um boleto que vence hoje, é urgente" },
+        { "id": "b4", "texto": "Não consigo atender ligação agora, tô no trabalho" }
+      ],
+      "veredito": "golpe",
+      "sinais": [
+        { "bloco": "b1", "titulo": "Número novo sem confirmação", "explicacao": "Golpistas pegam foto e nome de alguém nas redes sociais e mandam mensagem de um número novo." },
+        { "bloco": "b2", "titulo": "Pedido de dinheiro com desculpa", "explicacao": "Sempre tem um motivo para a pessoa não poder pagar ela mesma." },
+        { "bloco": "b3", "titulo": "Urgência", "explicacao": "Vence hoje, é urgente: pressão para agir sem conferir." },
+        { "bloco": "b4", "titulo": "Evita ligação", "explicacao": "Se fosse seu filho, uma ligação de 10 segundos resolveria. O golpista foge disso." }
+      ],
+      "explicacao": "Antes de qualquer Pix, ligue para o número antigo da pessoa ou faça uma pergunta que só ela saberia responder. Conferir por outro canal desmonta esse golpe."
+    },
+    {
+      "id": "lembrete-vacina",
+      "canal": "email",
+      "remetente": { "nome": "Clínica Patas & Cia", "email": "atendimento@patasecia.example" },
+      "assunto": "Lembrete: vacina do Thor vence em 15 dias",
+      "hora": "Ontem, 09:15",
+      "blocos": [
+        { "id": "b1", "texto": "Olá, Marcos! A vacina V10 do Thor vence no dia 12/11.", "nota": "A clínica tem seu nome e o do seu pet porque você é cliente. Isso é esperado." },
+        { "id": "b2", "texto": "Para agendar, ligue para o telefone que está no seu cartão de vacinação ou fale com a recepção.", "nota": "Ela manda você usar um contato que você já conhece. Ponto a favor." },
+        { "id": "b3", "texto": "Não pedimos senhas, dados de cartão ou pagamentos por e-mail.", "nota": "Mensagem legítima costuma deixar isso claro." },
+        { "id": "b4", "texto": "Equipe Patas & Cia" }
+      ],
+      "veredito": "legitima",
+      "sinais": [],
+      "explicacao": "Não há link, anexo, pedido de dados ou cobrança, e o contato indicado é um que você já tem. Remetente com o domínio da clínica e informação que faz sentido para um cliente. Mesmo assim, se ficasse em dúvida, bastava ligar para a clínica."
+    },
+    {
+      "id": "pix-loja",
+      "canal": "pix",
+      "remetente": { "nome": "Loja Capivara Games (anúncio em rede social)" },
+      "blocos": [
+        { "id": "b1", "rotulo": "Você vai pagar", "texto": "R$ 1.299,00", "nota": "O valor sozinho não diz muito. Mas preço muito abaixo do mercado é sinal de alerta." },
+        { "id": "b2", "rotulo": "Para", "texto": "M. R. SILVA SERVICOS DIGITAIS" },
+        { "id": "b3", "rotulo": "Instituição", "texto": "Banco Jabuticaba Digital", "nota": "O banco do recebedor não indica golpe por si só." },
+        { "id": "b4", "rotulo": "Chave Pix", "texto": "CPF •••.482.117-••" },
+        { "id": "b5", "rotulo": "Descrição", "texto": "Console + 2 controles PROMO RELÂMPAGO" }
+      ],
+      "veredito": "golpe",
+      "sinais": [
+        { "bloco": "b2", "titulo": "Recebedor não é a loja", "explicacao": "Você achava que estava pagando a Loja Capivara Games, mas o dinheiro vai para outro nome. Confira sempre o nome do recebedor antes de confirmar." },
+        { "bloco": "b4", "titulo": "Chave é CPF de pessoa física", "explicacao": "Loja de verdade costuma receber em conta da empresa (CNPJ). CPF de um terceiro é um alerta forte." },
+        { "bloco": "b5", "titulo": "Promoção relâmpago", "explicacao": "Pressa e preço bom demais são as iscas do golpe do falso anúncio." }
+      ],
+      "explicacao": "A tela de confirmação do Pix é sua última chance. Se o nome do recebedor não bate com quem você acha que está pagando, pare. Depois de confirmado, o dinheiro sai na hora."
+    }
+  ]
+}

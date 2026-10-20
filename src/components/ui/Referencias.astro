@@ -1,0 +1,42 @@
+---
+interface Props {
+  itens: { titulo: string; url: string; nota?: string }[];
+}
+const { itens } = Astro.props;
+---
+{
+  itens.length > 0 && (
+    <section class="referencias" aria-labelledby="titulo-referencias">
+      <h2 id="titulo-referencias">Referências</h2>
+      <ol>
+        {itens.map((r) => (
+          <li>
+            <a href={r.url} rel="noopener" target="_blank">{r.titulo}</a>
+            {r.nota && <span class="ref-nota"> {r.nota}</span>}
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .referencias {
+    margin-top: var(--esp-7);
+    padding-top: var(--esp-4);
+    border-top: 2px solid var(--cor-borda);
+    font-size: var(--tam-sm);
+    max-width: var(--largura-texto);
+  }
+  .referencias h2 {
+    margin-top: 0;
+    font-size: var(--tam-lg);
+  }
+  .referencias li {
+    margin-bottom: var(--esp-2);
+    overflow-wrap: anywhere;
+  }
+  .ref-nota {
+    color: var(--cor-texto-suave);
+  }
+</style>

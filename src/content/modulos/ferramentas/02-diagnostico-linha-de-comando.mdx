@@ -1,0 +1,279 @@
+---
+disciplina: ferramentas
+encontro: 2
+data: 2026-10-26
+titulo: Diagnóstico pela linha de comando
+resumo: Descobrir quem é a máquina na rede, por onde ela sai, quem responde, que nome aponta para onde e o que está trafegando.
+liberado: true
+objetivos:
+  - Ler a saída de ip a e ip r e achar IP, máscara e gateway
+  - Listar as portas abertas de uma máquina com ss e saber qual programa está em cada uma
+  - Testar se um host responde com ping e ver o caminho até ele com traceroute
+  - Consultar o DNS com dig e entender a resposta
+  - Capturar pacotes com tcpdump usando filtros simples
+lab:
+  tipo: terminal
+  dados: lab-encontro-02
+  titulo: Lab virtual no terminal
+  intro: Você está logado no srv-lab, um servidor da rede do laboratório. A rede é fictícia e roda inteira no seu navegador. Cumpra as 6 missões. Se travar, abra a dica, e clique num comando sugerido para colar no terminal.
+quiz: ferramentas-02
+referencias:
+  - titulo: "ip(8), manual do iproute2"
+    url: https://man7.org/linux/man-pages/man8/ip.8.html
+  - titulo: "ip-address(8)"
+    url: https://man7.org/linux/man-pages/man8/ip-address.8.html
+  - titulo: "ip-route(8)"
+    url: https://man7.org/linux/man-pages/man8/ip-route.8.html
+  - titulo: "ss(8)"
+    url: https://man7.org/linux/man-pages/man8/ss.8.html
+  - titulo: "ping(8), iputils"
+    url: https://man7.org/linux/man-pages/man8/ping.8.html
+  - titulo: "traceroute(8)"
+    url: https://man7.org/linux/man-pages/man8/traceroute.8.html
+  - titulo: "dig, documentação do BIND 9"
+    url: https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
+  - titulo: "tcpdump(1)"
+    url: https://www.tcpdump.org/manpages/tcpdump.1.html
+  - titulo: "pcap-filter(7), sintaxe dos filtros do tcpdump"
+    url: https://www.tcpdump.org/manpages/pcap-filter.7.html
+  - titulo: "RFC 792, Internet Control Message Protocol (ICMP)"
+    url: https://www.rfc-editor.org/rfc/rfc792
+  - titulo: "RFC 1035, Domain Names: Implementation and Specification"
+    url: https://www.rfc-editor.org/rfc/rfc1035
+  - titulo: "RFC 9293, Transmission Control Protocol (TCP)"
+    url: https://www.rfc-editor.org/rfc/rfc9293
+  - titulo: "RFC 1918, endereços privados"
+    url: https://www.rfc-editor.org/rfc/rfc1918
+  - titulo: "RFC 8375, domínio home.arpa"
+    url: https://www.rfc-editor.org/rfc/rfc8375
+    nota: (por isso a rede do lab usa lab.home.arpa, que nunca existe na internet)
+---
+
+import SaidaComentada from '@/components/ui/SaidaComentada.astro';
+
+## Antes de proteger, enxergar
+
+Não dá para defender uma rede que você não conhece. Antes de configurar firewall, trocar senha ou instalar antivírus, o técnico precisa responder perguntas básicas: qual é o IP desta máquina? Por onde ela sai para outras redes? Quais portas ela deixa abertas? Aquele servidor está fora do ar ou é a rede que caiu?
+
+Seis comandos respondem quase tudo isso. Todos vêm no Linux, todos rodam no terminal, e você vai usar todos no lab desta aula.
+
+| Pergunta | Comando |
+| --- | --- |
+| Qual é o meu IP? | `ip a` |
+| Por onde eu saio para outras redes? | `ip r` |
+| Que portas estão abertas aqui? | `ss -tulpn` |
+| Aquela máquina responde? | `ping` |
+| Por onde o pacote passa até lá? | `traceroute` |
+| Esse nome aponta para qual IP? | `dig` |
+| O que está passando no cabo agora? | `tcpdump` |
+
+Os exemplos abaixo são do mesmo servidor que você vai usar no lab, o **srv-lab**. A rede é fictícia: só endereços privados (192.168.56.0/24 e 10.0.0.0/24), que não existem na internet.
+
+## ip: quem é esta máquina na rede
+
+**O que faz:** mostra e configura interfaces de rede, endereços e rotas. Faz parte do pacote iproute2 e substitui os antigos `ifconfig` e `route`, que muitas distribuições nem instalam mais.
+
+Você vai usar dois "objetos" do `ip` o tempo todo: `address` (abreviado `a`) e `route` (abreviado `r`).
+
+<SaidaComentada
+  comando="ip a"
+  notas={[
+    { linha: 1, texto: '<code>lo</code> é o loopback: a máquina falando com ela mesma. Sempre 127.0.0.1.' },
+    { linha: 5, texto: '<code>enp0s3</code> é a placa de rede de verdade. <code>UP,LOWER_UP</code> e <code>state UP</code>: ligada e com link (cabo conectado).' },
+    { linha: 6, texto: '<code>link/ether</code> é o endereço MAC, gravado na placa.' },
+    { linha: 7, texto: '<code>inet 192.168.56.20/24</code>: o IPv4 da máquina e a máscara /24 (255.255.255.0). <code>brd</code> é o endereço de broadcast da rede.' },
+    { linha: 9, texto: '<code>enp0s8</code> está <code>DOWN</code> e sem <code>inet</code>: placa desligada ou sem cabo. Primeira coisa a olhar quando "a rede não funciona".' },
+  ]}
+>
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:3a:1c:5e brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.20/24 brd 192.168.56.255 scope global enp0s3
+       valid_lft forever preferred_lft forever
+3: enp0s8: <BROADCAST,MULTICAST> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether 08:00:27:c1:7e:42 brd ff:ff:ff:ff:ff:ff
+```
+</SaidaComentada>
+
+Para uma visão resumida, use `ip -br a` (uma linha por interface). Para ver só IPv4, `ip -4 a`.
+
+<SaidaComentada
+  comando="ip r"
+  notas={[
+    { linha: 1, texto: 'A <strong>rota padrão</strong>: tudo que não for da rede local vai para o <strong>gateway</strong> 192.168.56.1, saindo pela enp0s3.' },
+    { linha: 2, texto: 'A própria rede 192.168.56.0/24 é alcançada direto, sem passar por roteador (<code>scope link</code>).' },
+  ]}
+>
+```
+default via 192.168.56.1 dev enp0s3 proto static metric 100
+192.168.56.0/24 dev enp0s3 proto kernel scope link src 192.168.56.20 metric 100
+```
+</SaidaComentada>
+
+**Quando usar:** sempre que a máquina "não tem rede". Sem `inet`, o problema é endereçamento (DHCP, cabo, placa). Sem linha `default`, a máquina fala com a rede local mas não sai dela. Quer saber por qual rota um destino específico vai? `ip route get 10.0.0.15` responde.
+
+## ss: o que está escutando nesta máquina
+
+**O que faz:** lista os sockets, ou seja, as conexões abertas e as portas em escuta. É o substituto moderno do `netstat`.
+
+Cada porta escutando é uma porta de entrada. Para segurança, este é um dos comandos mais importantes da aula: serviço que você não sabia que estava rodando é serviço que você não está protegendo.
+
+As opções mais usadas, juntas, formam o famoso `ss -tulpn`: **t**cp, **u**dp, **l**istening (só os que escutam), **p**rocessos e **n**umérico (mostra 22 em vez de "ssh").
+
+<SaidaComentada
+  comando="sudo ss -tulpn"
+  prompt="aluno@srv-lab:~$"
+  notas={[
+    { linha: 3, texto: 'SSH na porta 22, escutando em <code>0.0.0.0</code>: aceita conexão vinda de qualquer interface, ou seja, de qualquer máquina que alcance o servidor.' },
+    { linha: 4, texto: 'O servidor web (nginx) está na <strong>8080</strong>, não na 80 padrão. Só o ss mostra isso com certeza.' },
+    { linha: 5, texto: 'O banco PostgreSQL escuta só em <code>127.0.0.1</code>: só a própria máquina consegue conectar. Isso é uma boa prática de segurança.' },
+  ]}
+>
+```
+Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+udp   UNCONN 0      0          127.0.0.1:323       0.0.0.0:*    users:(("chronyd",pid=690,fd=5))
+tcp   LISTEN 0      4096         0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=801,fd=3))
+tcp   LISTEN 0      4096         0.0.0.0:8080      0.0.0.0:*    users:(("nginx",pid=944,fd=6))
+tcp   LISTEN 0      4096       127.0.0.1:5432      0.0.0.0:*    users:(("postgres",pid=1010,fd=7))
+```
+</SaidaComentada>
+
+**Por que o sudo?** Sem ele, o `ss` mostra as portas, mas a coluna Process fica vazia para programas de outros usuários (o nginx roda como root). Com `sudo`, você vê tudo.
+
+**Quando usar:** para conferir se um serviço subiu ("o site não abre, o nginx está mesmo escutando?") e para auditar a máquina ("tem alguma porta aberta que não deveria?"). Para ver conexões já estabelecidas em vez de portas em escuta, tire o `-l`: `ss -tn`.
+
+## ping: alguém aí?
+
+**O que faz:** manda pacotes ICMP do tipo *echo request* e espera *echo reply*. É o "alô, tá me ouvindo?" das redes.
+
+<SaidaComentada
+  comando="ping -c 4 gw"
+  notas={[
+    { linha: 1, texto: 'O nome <code>gw</code> foi completado para <code>gw.lab.home.arpa</code> e resolvido para 192.168.56.1.' },
+    { linha: 2, texto: '<code>icmp_seq</code> numera cada pacote. <code>ttl</code> é quantos roteadores o pacote ainda poderia atravessar. <code>time</code> é o tempo de ida e volta.' },
+    { linha: 8, texto: 'O resumo: quantos foram, quantos voltaram e a perda. 0% é o que você quer ver.' },
+  ]}
+>
+```
+PING gw.lab.home.arpa (192.168.56.1) 56(84) bytes of data.
+64 bytes from gw.lab.home.arpa (192.168.56.1): icmp_seq=1 ttl=64 time=0.451 ms
+64 bytes from gw.lab.home.arpa (192.168.56.1): icmp_seq=2 ttl=64 time=0.627 ms
+64 bytes from gw.lab.home.arpa (192.168.56.1): icmp_seq=3 ttl=64 time=0.505 ms
+64 bytes from gw.lab.home.arpa (192.168.56.1): icmp_seq=4 ttl=64 time=0.872 ms
+
+--- gw.lab.home.arpa ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3033ms
+rtt min/avg/max/mdev = 0.451/0.614/0.872/0.162 ms
+```
+</SaidaComentada>
+
+No Linux o ping **não para sozinho**: ele fica mandando até você apertar <kbd>Ctrl</kbd>+<kbd>C</kbd>. Por isso use sempre `-c` com a quantidade de pacotes.
+
+**Cuidado com a conclusão.** Ping sem resposta não prova que a máquina está desligada. Muitos firewalls bloqueiam ICMP de propósito. O contrário também vale: responder ping não quer dizer que o site ou o serviço está funcionando. Ping testa a rede, não a aplicação.
+
+Duas mensagens que você vai encontrar: `Destination Host Unreachable` (ninguém na rede local respondeu por aquele IP) e `Temporary failure in name resolution` (o problema nem chegou no ping, foi o DNS que falhou).
+
+## traceroute: o caminho até lá
+
+**O que faz:** mostra cada roteador (salto) no caminho até o destino. Ele manda pacotes com TTL 1, depois 2, depois 3... Cada roteador que zera o TTL descarta o pacote e devolve um ICMP *time exceeded*, se identificando. No Linux, por padrão, são 3 sondas por salto e no máximo 30 saltos.
+
+<SaidaComentada
+  comando="traceroute -n 10.0.0.15"
+  notas={[
+    { linha: 2, texto: 'Salto 1: o gateway da nossa rede. Os três tempos são as três sondas.' },
+    { linha: 3, texto: 'Salto 2: o roteador da outra rede (10.0.0.0/24) respondeu.' },
+    { linha: 4, texto: '<code>* * *</code>: nenhuma das três sondas teve resposta a tempo. O problema está daqui para frente.' },
+  ]}
+>
+```
+traceroute to 10.0.0.15 (10.0.0.15), 30 hops max, 60 byte packets
+ 1  192.168.56.1  0.548 ms  0.480 ms  0.545 ms
+ 2  10.0.0.1  1.21 ms  1.22 ms  1.66 ms
+ 3  * * *
+ 4  * * *
+```
+</SaidaComentada>
+
+**Quando usar:** quando o ping falha e você quer saber **onde** o caminho quebra. Se o primeiro salto já não responde, o problema está perto (cabo, gateway). Se para lá na frente, o seu lado está ok. O `-n` evita que ele tente traduzir cada IP em nome, o que deixa tudo mais rápido.
+
+Asteriscos isolados no meio do caminho nem sempre são problema: alguns roteadores simplesmente não respondem a esse tipo de sonda e repassam o tráfego normalmente.
+
+## dig: perguntando ao DNS
+
+**O que faz:** consulta servidores DNS e mostra a resposta completa. É a ferramenta para responder "esse nome aponta para onde?" e "quem respondeu isso?".
+
+<SaidaComentada
+  comando="dig intranet.lab.home.arpa"
+  notas={[
+    { linha: 1, texto: '<code>status: NOERROR</code>: deu certo. <code>NXDOMAIN</code> seria "esse nome não existe". <code>SERVFAIL</code>, "o servidor não conseguiu responder".' },
+    { linha: 5, texto: 'A pergunta: o registro <code>A</code> (endereço IPv4) de intranet.lab.home.arpa.' },
+    { linha: 8, texto: '<code>CNAME</code>: intranet é um apelido de srv-lab. O número 300 é o TTL do registro, em segundos (quanto tempo pode ficar em cache).' },
+    { linha: 9, texto: 'O registro <code>A</code> final: 192.168.56.20.' },
+    { linha: 12, texto: 'Quem respondeu: o DNS interno 192.168.56.53, na porta 53, via UDP.' },
+  ]}
+>
+```
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 52371
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;intranet.lab.home.arpa.			IN	A
+
+;; ANSWER SECTION:
+intranet.lab.home.arpa.		300	IN	CNAME	srv-lab.lab.home.arpa.
+srv-lab.lab.home.arpa.		300	IN	A	192.168.56.20
+
+;; Query time: 3 msec
+;; SERVER: 192.168.56.53#53(192.168.56.53) (UDP)
+```
+</SaidaComentada>
+
+Atalhos úteis: `dig +short NOME` mostra só a resposta; `dig -x IP` faz a consulta reversa (de IP para nome); `dig @SERVIDOR NOME` pergunta para um servidor específico.
+
+**Quando usar:** quando "o site não abre mas o ping no IP funciona". Nesse caso o problema costuma ser DNS. Para segurança, o dig também ajuda a perceber quando um nome está apontando para um IP estranho, que é exatamente o que acontece quando alguém altera o DNS de um roteador (você vai ver um exemplo disso na disciplina de Defensiva).
+
+## tcpdump: vendo os pacotes passarem
+
+**O que faz:** captura os pacotes que passam por uma interface e mostra um resumo de cada um. É o "raio X" da rede.
+
+Capturar tráfego exige privilégio de administrador, por isso ele roda com `sudo`. Opções que você vai usar sempre: `-i` escolhe a interface, `-n` não converte IPs e portas em nomes, `-c N` para depois de N pacotes. Depois das opções vem o **filtro**: `port 53`, `host 192.168.56.30`, `icmp`, `tcp and port 8080`...
+
+<SaidaComentada
+  comando="sudo tcpdump -n -i enp0s3 port 8080"
+  notas={[
+    { linha: 2, texto: 'Hora, origem (IP.porta), destino (IP.porta). <code>Flags [S]</code> é o SYN: o cliente 192.168.56.30 pedindo para abrir conexão.' },
+    { linha: 3, texto: '<code>[S.]</code> é SYN + ACK: o servidor aceita. (O ponto significa ACK.)' },
+    { linha: 4, texto: '<code>[.]</code> é só ACK: fim do aperto de mão de três vias. Conexão aberta.' },
+    { linha: 5, texto: '<code>[P.]</code> traz dados: um pedido HTTP <code>GET /</code>, em texto aberto.' },
+  ]}
+>
+```
+listening on enp0s3, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+14:02:13.552019 IP 192.168.56.30.51920 > 192.168.56.20.8080: Flags [S], seq 1893322113, win 64240, length 0
+14:02:13.552101 IP 192.168.56.20.8080 > 192.168.56.30.51920: Flags [S.], seq 2210931455, ack 1893322114, length 0
+14:02:13.552398 IP 192.168.56.30.51920 > 192.168.56.20.8080: Flags [.], ack 1, win 502, length 0
+14:02:13.552740 IP 192.168.56.30.51920 > 192.168.56.20.8080: Flags [P.], seq 1:87, ack 1, length 86: HTTP: GET / HTTP/1.1
+```
+</SaidaComentada>
+
+Os exemplos acima foram encurtados para caber na tela. No lab a saída vem completa.
+
+**Quando usar:** quando você precisa de prova do que está acontecendo de fato. "O cliente diz que mandou e o servidor diz que não recebeu": o tcpdump mostra quem está certo. É também a ferramenta que mostra por que protocolos sem criptografia (HTTP, Telnet, FTP) são perigosos: o conteúdo aparece inteiro. No próximo encontro você vai ver isso com uma senha.
+
+## Um roteiro de diagnóstico
+
+Quando algo "não funciona", vá de baixo para cima. Cada passo elimina uma camada de suspeitos:
+
+1. `ip a`: a interface está UP e tem IP?
+2. `ip r`: existe rota default?
+3. `ping` no gateway: a rede local funciona?
+4. `dig` no nome: o DNS resolve?
+5. `ping` ou `traceroute` no destino: o caminho existe? Onde quebra?
+6. `ss` no servidor: o serviço está mesmo escutando na porta certa?
+7. `tcpdump`: o pacote chega? A resposta sai?
+
+Agora vá para o lab e use esse roteiro nas missões.

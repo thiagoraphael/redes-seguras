@@ -1,0 +1,65 @@
+{
+  "titulo": "Revisão rápida: diagnóstico pela linha de comando",
+  "questoes": [
+    {
+      "id": "q1",
+      "enunciado": "Você rodou ip r e não apareceu nenhuma linha começando com default. O que provavelmente acontece com essa máquina?",
+      "alternativas": [
+        { "id": "a", "texto": "Ela não tem endereço IP." },
+        { "id": "b", "texto": "Ela fala com a rede local, mas não consegue sair para outras redes." },
+        { "id": "c", "texto": "O DNS está fora do ar." },
+        { "id": "d", "texto": "A placa de rede está desligada." }
+      ],
+      "correta": "b",
+      "explicacao": "A rota default diz para qual gateway mandar tudo que não é da rede local. Sem ela, a máquina alcança os vizinhos da mesma rede, mas não sabe como sair dela."
+    },
+    {
+      "id": "q2",
+      "enunciado": "Na saída do ss -tlnp aparece 127.0.0.1:5432 com o processo postgres. O que isso significa?",
+      "alternativas": [
+        { "id": "a", "texto": "O banco aceita conexão de qualquer máquina da rede." },
+        { "id": "b", "texto": "O banco está desligado." },
+        { "id": "c", "texto": "O banco só aceita conexões vindas da própria máquina." },
+        { "id": "d", "texto": "O banco está conectado ao IP 127.0.0.1 da internet." }
+      ],
+      "correta": "c",
+      "explicacao": "127.0.0.1 é o loopback. Um serviço escutando só nele não pode ser alcançado por outras máquinas. Quando aparece 0.0.0.0, aí sim ele aceita conexões de qualquer interface."
+    },
+    {
+      "id": "q3",
+      "enunciado": "O ping para o servidor da clínica dá 100% de perda. Qual conclusão é correta?",
+      "alternativas": [
+        { "id": "a", "texto": "O servidor com certeza está desligado." },
+        { "id": "b", "texto": "Ainda não dá para concluir: o servidor pode estar desligado, mas um firewall também pode estar bloqueando ICMP." },
+        { "id": "c", "texto": "O problema é com certeza o DNS." },
+        { "id": "d", "texto": "O cabo do seu computador está solto." }
+      ],
+      "correta": "b",
+      "explicacao": "Ping sem resposta só diz que não houve resposta ao ICMP. Muitos firewalls bloqueiam ICMP de propósito. O próximo passo é usar traceroute para ver onde o caminho para, ou testar o serviço diretamente."
+    },
+    {
+      "id": "q4",
+      "enunciado": "No traceroute, os saltos 1 e 2 respondem e do 3 em diante só aparece * * *. O que isso indica?",
+      "alternativas": [
+        { "id": "a", "texto": "Que a sua placa de rede está com defeito." },
+        { "id": "b", "texto": "Que o gateway da sua rede não funciona." },
+        { "id": "c", "texto": "Que os pacotes chegam até o segundo roteador e o problema (ou um bloqueio) está depois dele." },
+        { "id": "d", "texto": "Que o traceroute precisa de sudo." }
+      ],
+      "correta": "c",
+      "explicacao": "Cada linha é um salto que respondeu. Se os dois primeiros respondem, sua máquina e seu gateway estão funcionando. A falta de resposta começa depois, mais perto do destino."
+    },
+    {
+      "id": "q5",
+      "enunciado": "Você rodou tcpdump sem sudo e recebeu \"You don't have permission to perform this capture\". Por quê?",
+      "alternativas": [
+        { "id": "a", "texto": "Porque capturar pacotes de uma interface exige privilégio de administrador." },
+        { "id": "b", "texto": "Porque o tcpdump não está instalado." },
+        { "id": "c", "texto": "Porque faltou o filtro de porta." },
+        { "id": "d", "texto": "Porque a interface está DOWN." }
+      ],
+      "correta": "a",
+      "explicacao": "Ler o tráfego da placa de rede é uma operação privilegiada, justamente porque permite ver dados de outros programas e usuários. Por isso usamos sudo, e por isso essa ferramenta só se usa em rede que você tem autorização para analisar."
+    }
+  ]
+}

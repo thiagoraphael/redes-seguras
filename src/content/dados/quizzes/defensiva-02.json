@@ -1,0 +1,65 @@
+{
+  "titulo": "Revisão rápida: tipos de ataque e malware",
+  "questoes": [
+    {
+      "id": "q1",
+      "enunciado": "Qual é a principal diferença entre um vírus e um worm?",
+      "alternativas": [
+        { "id": "a", "texto": "O vírus só ataca celular e o worm só ataca computador." },
+        { "id": "b", "texto": "O worm se espalha sozinho pela rede explorando falhas. O vírus depende de alguém abrir o arquivo infectado." },
+        { "id": "c", "texto": "O vírus criptografa arquivos e o worm rouba senhas." },
+        { "id": "d", "texto": "Não há diferença, são nomes diferentes para a mesma coisa." }
+      ],
+      "correta": "b",
+      "explicacao": "O worm se replica pela rede sem ação do usuário, explorando vulnerabilidades. O vírus se insere em arquivos e programas e se espalha quando eles são abertos e enviados adiante."
+    },
+    {
+      "id": "q2",
+      "enunciado": "Uma clínica foi atingida por ransomware. Qual medida, tomada ANTES do ataque, mais ajudaria a recuperar os dados?",
+      "alternativas": [
+        { "id": "a", "texto": "Ter um backup atualizado e guardado desconectado do computador." },
+        { "id": "b", "texto": "Ter um HD externo sempre plugado no computador com cópia dos arquivos." },
+        { "id": "c", "texto": "Ter dinheiro guardado para pagar o resgate." },
+        { "id": "d", "texto": "Usar uma senha forte no Wi-Fi." }
+      ],
+      "correta": "a",
+      "explicacao": "Backup é a garantia de recuperação. Mas um HD que fica sempre ligado no computador pode ser criptografado junto. E pagar o resgate não garante que os dados voltem."
+    },
+    {
+      "id": "q3",
+      "enunciado": "O WannaCry, em 2017, se espalhou explorando uma falha do Windows. O que tornava os computadores vulneráveis?",
+      "alternativas": [
+        { "id": "a", "texto": "Não existia correção para essa falha." },
+        { "id": "b", "texto": "Os usuários clicaram em um link de phishing." },
+        { "id": "c", "texto": "A correção já existia havia quase dois meses, mas não tinha sido instalada." },
+        { "id": "d", "texto": "Os computadores estavam sem antivírus pago." }
+      ],
+      "correta": "c",
+      "explicacao": "A Microsoft publicou a correção MS17-010 em março de 2017. O ataque foi em maio. Quem tinha atualizado estava protegido contra a propagação pela rede."
+    },
+    {
+      "id": "q4",
+      "enunciado": "Num ataque DDoS que usa uma botnet, de onde vêm as requisições?",
+      "alternativas": [
+        { "id": "a", "texto": "Do computador do próprio atacante, só dele." },
+        { "id": "b", "texto": "De muitos dispositivos infectados, como computadores, câmeras e roteadores, controlados remotamente." },
+        { "id": "c", "texto": "Do servidor da vítima, que ataca a si mesmo." },
+        { "id": "d", "texto": "De funcionários da empresa atacada." }
+      ],
+      "correta": "b",
+      "explicacao": "Botnet é uma rede de dispositivos infectados e controlados pelo atacante. Por isso trocar a senha padrão e atualizar o roteador e as câmeras de casa também é proteção contra DDoS: evita que eles virem parte da botnet."
+    },
+    {
+      "id": "q5",
+      "enunciado": "Você está na tela de confirmação de um Pix para uma loja e o nome do recebedor é de uma pessoa que você não conhece. O que fazer?",
+      "alternativas": [
+        { "id": "a", "texto": "Confirmar, porque lojas sempre usam o nome do dono." },
+        { "id": "b", "texto": "Confirmar e mandar o comprovante para a loja por mensagem." },
+        { "id": "c", "texto": "Parar e verificar pelo canal oficial da loja antes de pagar." },
+        { "id": "d", "texto": "Trocar de banco e tentar de novo." }
+      ],
+      "correta": "c",
+      "explicacao": "Nome de recebedor diferente de quem você acha que está pagando é um dos sinais mais claros de golpe. A tela de confirmação é a última chance de parar."
+    }
+  ]
+}

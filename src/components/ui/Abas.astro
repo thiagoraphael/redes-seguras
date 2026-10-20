@@ -1,0 +1,144 @@
+---
+/**
+ * Abas acessíveis (padrão WAI-ARIA tabs) sem framework.
+ * Setas esquerda/direita, Home e End trocam de aba. A aba ativa vai para o hash
+ * da URL (#teoria, #lab, #revisao), então dá para mandar link direto.
+ *
+ * Uso: <Abas abas={[{ id: 'teoria', rotulo: 'Teoria' }]}> <div slot="teoria">...</div> </Abas>
+ */
+interface Props {
+  abas: { id: string; rotulo: string }[];
+  rotuloGrupo: string;
+}
+const { abas, rotuloGrupo } = Astro.props;
+---
+<div class="abas" data-abas>
+  <div class="abas-lista" role="tablist" aria-label={rotuloGrupo}>
+    {
+      abas.map((a, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`aba-${a.id}`}
+          aria-controls={`painel-${a.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-aba={a.id}
+        >
+          {a.rotulo}
+        </button>
+      ))
+    }
+  </div>
+  {
+    abas.map((a, i) => (
+      <section
+        role="tabpanel"
+        id={`painel-${a.id}`}
+        aria-labelledby={`aba-${a.id}`}
+        tabindex="0"
+        hidden={i !== 0}
+        class="abas-painel"
+      >
+        <slot name={a.id} />
+      </section>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-abas]').forEach((raiz) => {
+    const abas = Array.from(raiz.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const ids = abas.map((a) => a.dataset.aba!);
+
+    function ativar(id: string, focar = false, atualizarHash = true) {
+      abas.forEach((aba) => {
+        const sel = aba.dataset.aba === id;
+        aba.setAttribute('aria-selected', String(sel));
+        aba.tabIndex = sel ? 0 : -1;
+        const painel = document.getElementById(aba.getAttribute('aria-controls')!);
+        if (painel) painel.hidden = !sel;
+        if (sel && focar) aba.focus();
+      });
+      if (atualizarHash) {
+        try {
+          history.replaceState(null, '', `#${id}`);
+        } catch {
+          /* ignora */
+        }
+      }
+      raiz.dispatchEvent(new CustomEvent('aba-ativada', { detail: id, bubbles: true }));
+    }
+
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => ativar(aba.dataset.aba!));
+      aba.addEventListener('keydown', (e) => {
+        let alvo = -1;
+        if (e.key === 'ArrowRight') alvo = (i + 1) % abas.length;
+        else if (e.key === 'ArrowLeft') alvo = (i - 1 + abas.length) % abas.length;
+        else if (e.key === 'Home') alvo = 0;
+        else if (e.key === 'End') alvo = abas.length - 1;
+        if (alvo >= 0) {
+          e.preventDefault();
+          ativar(ids[alvo]!, true);
+        }
+      });
+    });
+
+    const inicial = location.hash.replace('#', '');
+    if (ids.includes(inicial)) {
+      ativar(inicial, false, false);
+      requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
+    }
+    window.addEventListener('hashchange', () => {
+      const h = location.hash.replace('#', '');
+      if (ids.includes(h)) ativar(h, false, false);
+    });
+    // Links internos tipo <a href="#lab"> também trocam de aba.
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+      const alvo = a.getAttribute('href')!.slice(1);
+      if (ids.includes(alvo)) {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          ativar(alvo, true);
+          raiz.scrollIntoView({ block: 'start' });
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  .abas-lista {
+    display: flex;
+    gap: var(--esp-1);
+    border-bottom: 2px solid var(--cor-borda);
+    margin-bottom: var(--esp-5);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  [role='tab'] {
+    font: inherit;
+    font-weight: 600;
+    font-size: var(--tam-md);
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: var(--esp-3) var(--esp-4);
+    color: var(--cor-texto-suave);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  [role='tab']:hover {
+    color: var(--cor-texto);
+    background: var(--cor-superficie-2);
+  }
+  [role='tab'][aria-selected='true'] {
+    color: var(--cor-destaque);
+    border-bottom-color: var(--cor-destaque);
+  }
+  .abas-painel:focus-visible {
+    outline-offset: 6px;
+  }
+</style>

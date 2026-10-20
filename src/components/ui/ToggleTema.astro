@@ -1,0 +1,48 @@
+---
+/** Botão de tema claro/escuro. A escolha fica no localStorage (se disponível). */
+---
+<button type="button" class="btn btn-sutil toggle-tema" data-toggle-tema aria-live="polite">
+  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path class="lua" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+    <g class="sol"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></g>
+  </svg>
+  <span data-rotulo>Tema</span>
+</button>
+
+<script>
+  function temaAtual(): 'light' | 'dark' {
+    const forcado = document.documentElement.dataset.theme;
+    if (forcado === 'light' || forcado === 'dark') return forcado;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function atualizar(botao: HTMLElement) {
+    const escuro = temaAtual() === 'dark';
+    const rotulo = botao.querySelector('[data-rotulo]');
+    if (rotulo) rotulo.textContent = escuro ? 'Tema claro' : 'Tema escuro';
+    botao.setAttribute('aria-label', escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro');
+    botao.classList.toggle('escuro', escuro);
+  }
+  document.querySelectorAll<HTMLElement>('[data-toggle-tema]').forEach((botao) => {
+    atualizar(botao);
+    botao.addEventListener('click', () => {
+      const novo = temaAtual() === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = novo;
+      try {
+        localStorage.setItem('site-redes:tema', novo);
+      } catch {
+        /* sem storage: vale só para esta página */
+      }
+      atualizar(botao);
+    });
+  });
+</script>
+
+<style>
+  .toggle-tema .lua { display: inline; }
+  .toggle-tema .sol { display: none; }
+  .toggle-tema.escuro .lua { display: none; }
+  .toggle-tema.escuro .sol { display: inline; }
+  @media (max-width: 520px) {
+    [data-rotulo] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  }
+</style>

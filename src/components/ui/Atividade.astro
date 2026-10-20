@@ -1,0 +1,52 @@
+---
+/**
+ * Renderiza uma atividade do frontmatter (lab) com o componente certo.
+ * Os dados vêm do JSON referenciado e já foram validados no build.
+ */
+import { getEntry } from 'astro:content';
+import TerminalLab from '@/components/interativos/Terminal/TerminalLab';
+import AnalisadorPacotes from '@/components/interativos/AnalisadorPacotes/AnalisadorPacotes';
+import SimuladorMensagens from '@/components/interativos/SimuladorMensagens/SimuladorMensagens';
+import ClassificadorCenarios from '@/components/interativos/ClassificadorCenarios/ClassificadorCenarios';
+import IdentificadorSituacoes from '@/components/interativos/IdentificadorSituacoes/IdentificadorSituacoes';
+import { idAtividade } from '@/lib/ids';
+
+type Tipo = 'terminal' | 'pacotes' | 'mensagens' | 'cenarios' | 'situacoes';
+interface Props {
+  atividade: { tipo: Tipo; dados: { collection: string; id: string }; titulo?: string; intro?: string };
+  idModulo: string;
+}
+const { atividade, idModulo } = Astro.props;
+const entrada = await getEntry(atividade.dados as never);
+if (!entrada) throw new Error(`Dados "${atividade.dados.id}" não encontrados em ${atividade.dados.collection}.`);
+const dados = (entrada as { data: any }).data;
+const id = idAtividade(idModulo, atividade.dados.id);
+const tituloPadrao: Record<Tipo, string> = {
+  terminal: 'Terminal simulado',
+  pacotes: 'Analisador de pacotes',
+  mensagens: 'Golpe ou legítima?',
+  cenarios: dados.titulo ?? 'Classifique os itens',
+  situacoes: dados.titulo ?? 'Identifique o ataque',
+};
+---
+<section class="atividade">
+  <h2>{atividade.titulo ?? tituloPadrao[atividade.tipo]}</h2>
+  {atividade.intro && <p class="atividade-intro">{atividade.intro}</p>}
+  {atividade.tipo === 'terminal' && <TerminalLab client:visible rede={dados} idAtividade={id} />}
+  {atividade.tipo === 'pacotes' && <AnalisadorPacotes client:visible captura={dados} idAtividade={id} />}
+  {atividade.tipo === 'mensagens' && <SimuladorMensagens client:visible conjunto={dados} idAtividade={id} />}
+  {atividade.tipo === 'cenarios' && <ClassificadorCenarios client:visible cenario={dados} idAtividade={id} />}
+  {atividade.tipo === 'situacoes' && <IdentificadorSituacoes client:visible conjunto={dados} idAtividade={id} />}
+</section>
+
+<style>
+  .atividade + .atividade {
+    margin-top: var(--esp-7);
+  }
+  .atividade h2 {
+    margin-top: 0;
+  }
+  .atividade-intro {
+    max-width: var(--largura-texto);
+  }
+</style>

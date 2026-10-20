@@ -1,0 +1,60 @@
+{
+  "titulo": "Login na intranet da clínica: HTTP x HTTPS",
+  "descricao": "Captura de exemplo (fictícia). A recepção (192.168.56.30) faz login na intranet (192.168.56.20) duas vezes: primeiro por HTTP, depois por HTTPS.",
+  "pacotes": [
+    { "n": 1, "t": 0.0, "src": "192.168.56.30", "dst": "192.168.56.53", "proto": "DNS", "len": 82, "info": "Standard query 0x1a2b A intranet.lab.home.arpa", "camadas": { "udp": { "srcport": 50110, "dstport": 53 }, "dns": { "id": "0x1a2b", "query": "intranet.lab.home.arpa", "tipo": "A" } } },
+    { "n": 2, "t": 0.000912, "src": "192.168.56.53", "dst": "192.168.56.30", "proto": "DNS", "len": 121, "info": "Standard query response 0x1a2b A intranet.lab.home.arpa CNAME srv-lab.lab.home.arpa A 192.168.56.20", "camadas": { "udp": { "srcport": 53, "dstport": 50110 }, "dns": { "id": "0x1a2b", "query": "intranet.lab.home.arpa", "tipo": "A", "respostas": ["CNAME srv-lab.lab.home.arpa", "A 192.168.56.20"] } } },
+    { "n": 3, "t": 0.001530, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TCP", "len": 74, "info": "51520 → 80 [SYN] Seq=0 Win=64240 Len=0", "stream": 0, "direcao": "cliente", "camadas": { "ip": { "ttl": 64 }, "tcp": { "srcport": 51520, "dstport": 80, "flags": ["SYN"], "seq": 0 } } },
+    { "n": 4, "t": 0.001702, "src": "192.168.56.20", "dst": "192.168.56.30", "proto": "TCP", "len": 74, "info": "80 → 51520 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0", "stream": 0, "direcao": "servidor", "camadas": { "ip": { "ttl": 64 }, "tcp": { "srcport": 80, "dstport": 51520, "flags": ["SYN", "ACK"], "seq": 0, "ack": 1 } } },
+    { "n": 5, "t": 0.001844, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TCP", "len": 66, "info": "51520 → 80 [ACK] Seq=1 Ack=1 Win=64256 Len=0", "stream": 0, "direcao": "cliente", "camadas": { "tcp": { "srcport": 51520, "dstport": 80, "flags": ["ACK"], "seq": 1, "ack": 1 } } },
+    {
+      "n": 6, "t": 0.002210, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "HTTP", "len": 512, "info": "POST /login HTTP/1.1 (application/x-www-form-urlencoded)", "stream": 0, "direcao": "cliente",
+      "camadas": {
+        "tcp": { "srcport": 51520, "dstport": 80, "flags": ["PSH", "ACK"], "seq": 1, "ack": 1 },
+        "http": { "request": { "method": "POST", "uri": "/login", "headers": { "Host": "intranet.lab.home.arpa", "User-Agent": "Mozilla/5.0", "Content-Type": "application/x-www-form-urlencoded", "Content-Length": "34" } } }
+      },
+      "payload": "usuario=recepcao&senha=Gato%402026"
+    },
+    {
+      "n": 7, "t": 0.004871, "src": "192.168.56.20", "dst": "192.168.56.30", "proto": "HTTP", "len": 380, "info": "HTTP/1.1 302 Found", "stream": 0, "direcao": "servidor",
+      "camadas": {
+        "tcp": { "srcport": 80, "dstport": 51520, "flags": ["PSH", "ACK"], "seq": 1, "ack": 447 },
+        "http": { "response": { "code": 302, "phrase": "Found", "headers": { "Server": "nginx", "Location": "/agenda", "Set-Cookie": "sessao=8f2c41d9; HttpOnly" } } }
+      },
+      "payload": ""
+    },
+    { "n": 8, "t": 5.110034, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TCP", "len": 74, "info": "51530 → 443 [SYN] Seq=0 Win=64240 Len=0", "stream": 1, "direcao": "cliente", "camadas": { "tcp": { "srcport": 51530, "dstport": 443, "flags": ["SYN"], "seq": 0 } } },
+    { "n": 9, "t": 5.110221, "src": "192.168.56.20", "dst": "192.168.56.30", "proto": "TCP", "len": 74, "info": "443 → 51530 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0", "stream": 1, "direcao": "servidor", "camadas": { "tcp": { "srcport": 443, "dstport": 51530, "flags": ["SYN", "ACK"], "seq": 0, "ack": 1 } } },
+    { "n": 10, "t": 5.110390, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TCP", "len": 66, "info": "51530 → 443 [ACK] Seq=1 Ack=1 Win=64256 Len=0", "stream": 1, "direcao": "cliente", "camadas": { "tcp": { "srcport": 51530, "dstport": 443, "flags": ["ACK"], "seq": 1, "ack": 1 } } },
+    { "n": 11, "t": 5.111020, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TLSv1.3", "len": 583, "info": "Client Hello (SNI=intranet.lab.home.arpa)", "stream": 1, "direcao": "cliente", "camadas": { "tcp": { "srcport": 51530, "dstport": 443, "flags": ["PSH", "ACK"] }, "tls": { "tipo": "Client Hello", "sni": "intranet.lab.home.arpa", "versao": "TLS 1.3" } }, "payload": null },
+    { "n": 12, "t": 5.113487, "src": "192.168.56.20", "dst": "192.168.56.30", "proto": "TLSv1.3", "len": 1514, "info": "Server Hello, Change Cipher Spec, Application Data", "stream": 1, "direcao": "servidor", "camadas": { "tcp": { "srcport": 443, "dstport": 51530, "flags": ["PSH", "ACK"] }, "tls": { "tipo": "Server Hello", "versao": "TLS 1.3" } }, "payload": null },
+    { "n": 13, "t": 5.120339, "src": "192.168.56.30", "dst": "192.168.56.20", "proto": "TLSv1.3", "len": 615, "info": "Application Data", "stream": 1, "direcao": "cliente", "camadas": { "tcp": { "srcport": 51530, "dstport": 443, "flags": ["PSH", "ACK"] }, "tls": { "tipo": "Application Data", "versao": "TLS 1.3" } }, "payload": null },
+    { "n": 14, "t": 5.124770, "src": "192.168.56.20", "dst": "192.168.56.30", "proto": "TLSv1.3", "len": 466, "info": "Application Data", "stream": 1, "direcao": "servidor", "camadas": { "tcp": { "srcport": 443, "dstport": 51530, "flags": ["PSH", "ACK"] }, "tls": { "tipo": "Application Data", "versao": "TLS 1.3" } }, "payload": null }
+  ],
+  "missoes": [
+    {
+      "id": "metodo",
+      "enunciado": "Qual método HTTP foi usado para enviar o formulário de login?",
+      "dica": "Filtre por http e olhe a coluna Info.",
+      "comandosSugeridos": ["http.request"],
+      "resposta": { "tipo": "exata", "valor": "POST" },
+      "explicacao": "Formulários de login usam POST: os dados vão no corpo da requisição, não na URL. Mas isso não esconde nada: em HTTP o corpo também viaja em texto aberto."
+    },
+    {
+      "id": "senha-http",
+      "enunciado": "Qual senha a recepção digitou no login por HTTP?",
+      "dica": "Selecione o pacote do POST e veja os dados da aplicação, ou use Seguir fluxo TCP. O %40 é como o @ aparece codificado num formulário.",
+      "comandosSugeridos": ["http.request.method == \"POST\""],
+      "resposta": { "tipo": "umDe", "valores": ["Gato@2026", "Gato%402026"] },
+      "explicacao": "Em HTTP, qualquer um que capture o tráfego lê a senha. Por isso login sem HTTPS é inaceitável, mesmo em rede interna."
+    },
+    {
+      "id": "https",
+      "enunciado": "No segundo login, por HTTPS (porta 443), dá para ler a senha na captura? Responda sim ou não.",
+      "dica": "Filtre por tls e siga o fluxo TCP da porta 443.",
+      "comandosSugeridos": ["tls", "tcp.port == 443"],
+      "resposta": { "tipo": "umDe", "valores": ["nao", "não"] },
+      "explicacao": "Com TLS, a captura mostra quem falou com quem, quando e quanto, e até o nome do site (SNI). Mas o conteúdo, incluindo a senha, está cifrado."
+    }
+  ]
+}

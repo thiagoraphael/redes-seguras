@@ -1,0 +1,35 @@
+---
+/** Aviso fixo no topo de todo lab de Ferramentas. Texto definido pelo professor. */
+---
+<aside class="aviso-etico" role="note" aria-label="Aviso ético">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.6-3.2 8.4-8 9.8C7.2 20.4 4 16.6 4 12V6z"/><path d="M12 8v5M12 16h.01"/></svg>
+  <p>
+    Varredura, captura e ataque simulado só na rede isolada do laboratório, contra máquinas da turma.
+    Fazer isso em redes de terceiros é crime
+    (<a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12737.htm" rel="noopener" target="_blank">Lei 12.737/2012</a>).
+  </p>
+</aside>
+
+<style>
+  .aviso-etico {
+    display: flex;
+    gap: var(--esp-3);
+    align-items: flex-start;
+    background: var(--cor-alerta-suave);
+    border: 1px solid var(--cor-alerta);
+    color: var(--cor-texto);
+    border-radius: var(--raio-sm);
+    padding: var(--esp-3) var(--esp-4);
+    margin: 0 0 var(--esp-4);
+    font-size: var(--tam-sm);
+    font-weight: 600;
+  }
+  .aviso-etico svg {
+    flex: none;
+    color: var(--cor-alerta);
+    margin-top: 2px;
+  }
+  .aviso-etico p {
+    margin: 0;
+  }
+</style>

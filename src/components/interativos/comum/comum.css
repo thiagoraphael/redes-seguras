@@ -1,0 +1,295 @@
+/* Estilos compartilhados pelos componentes interativos. */
+.btn-pequeno {
+  min-height: 2rem;
+  padding: 0.35em 0.7em;
+  font-size: var(--tam-xs);
+}
+
+.barra-progresso {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--tam-xs);
+  color: var(--cor-texto-suave);
+}
+.barra-trilho {
+  flex: 1;
+  min-width: 80px;
+  height: 8px;
+  background: var(--cor-superficie-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.barra-preenchida {
+  height: 100%;
+  background: var(--cor-ok);
+  transition: width 0.3s;
+}
+.barra-texto {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ---------- Missões ---------- */
+.missoes {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  padding: var(--esp-4);
+}
+.missoes-topo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin-bottom: var(--esp-3);
+}
+.missoes-topo h3 {
+  margin: 0;
+  font-size: var(--tam-lg);
+}
+.missoes-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+.missao {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--esp-3);
+  background: var(--cor-fundo);
+}
+.missao-atual {
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 1px var(--cor-destaque);
+}
+.missao-feita {
+  background: var(--cor-ok-suave);
+  border-color: var(--cor-ok);
+}
+.missao-cab {
+  display: flex;
+  gap: var(--esp-2);
+  align-items: flex-start;
+}
+.missao-num {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: var(--tam-sm);
+  background: var(--cor-superficie-2);
+  border: 1px solid var(--cor-borda-forte);
+}
+.missao-feita .missao-num {
+  background: var(--cor-ok);
+  border-color: var(--cor-ok);
+  color: var(--cor-superficie);
+}
+.missao-enunciado {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--tam-sm);
+  line-height: 1.45;
+}
+.missao-form {
+  display: flex;
+  gap: var(--esp-2);
+  margin-top: var(--esp-3);
+}
+.missao-form input,
+.campo {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-family: var(--fonte-mono);
+  font-size: var(--tam-sm);
+  padding: 0.5em 0.7em;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-sm);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+.missao-form input[aria-invalid='true'] {
+  border-color: var(--cor-erro);
+}
+.missao-fb {
+  margin: var(--esp-2) 0 0;
+  font-size: var(--tam-sm);
+}
+.missao-fb p {
+  margin: 0 0 var(--esp-1);
+}
+.missao-fb-erro {
+  color: var(--cor-erro);
+  font-weight: 600;
+}
+.missao-dica {
+  margin-top: var(--esp-2);
+  font-size: var(--tam-sm);
+}
+.missao-dica p {
+  margin: var(--esp-2) 0;
+}
+.missao-dica-rotulo {
+  font-weight: 600;
+}
+.missao-comandos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+.chip-comando {
+  font: inherit;
+  border: 1px solid var(--cor-borda-forte);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-radius: var(--raio-sm);
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+}
+.chip-comando:hover {
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque-suave);
+}
+.chip-comando code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.missoes-reiniciar {
+  margin-top: var(--esp-3);
+  font-size: var(--tam-xs);
+}
+
+/* ---------- Cartão genérico de atividade ---------- */
+.ativ-cartao {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  padding: var(--esp-4) var(--esp-5);
+  box-shadow: var(--sombra);
+}
+.ativ-contador {
+  font-size: var(--tam-sm);
+  color: var(--cor-texto-suave);
+  font-weight: 600;
+  margin: 0 0 var(--esp-2);
+}
+.ativ-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  margin-top: var(--esp-4);
+  align-items: center;
+}
+.ativ-acoes .empurra {
+  margin-left: auto;
+}
+.opcoes-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--esp-2);
+  margin: var(--esp-3) 0 0;
+  padding: 0;
+  border: 0;
+}
+.opcao {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-3);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-sm);
+  background: var(--cor-superficie);
+  cursor: pointer;
+  font-size: var(--tam-sm);
+  line-height: 1.35;
+}
+.opcao:hover {
+  background: var(--cor-superficie-2);
+}
+.opcao:has(input:focus-visible) {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+.opcao:has(input:checked) {
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque-suave);
+  box-shadow: inset 0 0 0 1px var(--cor-destaque);
+}
+.opcao input {
+  accent-color: var(--cor-destaque);
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  flex: none;
+}
+.opcao-certa {
+  border-color: var(--cor-ok) !important;
+  background: var(--cor-ok-suave) !important;
+  box-shadow: inset 0 0 0 1px var(--cor-ok) !important;
+}
+.opcao-errada {
+  border-color: var(--cor-erro) !important;
+  background: var(--cor-erro-suave) !important;
+  box-shadow: inset 0 0 0 1px var(--cor-erro) !important;
+}
+.opcao-marca {
+  margin-left: auto;
+  font-weight: 700;
+  font-size: var(--tam-xs);
+  white-space: nowrap;
+}
+.opcao-certa .opcao-marca {
+  color: var(--cor-ok);
+}
+.opcao-errada .opcao-marca {
+  color: var(--cor-erro);
+}
+.placar {
+  text-align: center;
+  padding: var(--esp-4) 0;
+}
+.placar-numero {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--cor-destaque);
+  margin: 0 0 var(--esp-2);
+}
+
+.quiz-questao {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.quiz-questao legend {
+  padding: 0;
+  width: 100%;
+}
+.quiz-enunciado {
+  margin: 0;
+  font-size: var(--tam-lg);
+  line-height: 1.4;
+}
+.quiz-enunciado:focus {
+  outline: none;
+}
+.opcoes-lista {
+  grid-template-columns: 1fr;
+}
+fieldset:disabled .opcao {
+  cursor: default;
+}

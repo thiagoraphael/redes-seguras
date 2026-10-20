@@ -1,0 +1,120 @@
+/*
+ * Tokens de design. Troque cores aqui e o site inteiro acompanha.
+ * Contraste conferido para AA (texto normal >= 4.5:1) nos dois temas.
+ */
+:root {
+  color-scheme: light;
+  --fonte-texto: 'Segoe UI', system-ui, -apple-system, 'Noto Sans', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fonte-mono: 'Cascadia Mono', 'Consolas', ui-monospace, 'SFMono-Regular', 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+
+  --tam-xs: 0.8125rem;
+  --tam-sm: 0.9375rem;
+  --tam-md: 1.0625rem;
+  --tam-lg: 1.25rem;
+  --tam-xl: 1.625rem;
+  --tam-2xl: clamp(1.875rem, 1.4rem + 1.8vw, 2.5rem);
+
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+
+  --raio: 10px;
+  --raio-sm: 6px;
+  --largura-texto: 72ch;
+  --largura-pagina: 1180px;
+
+  /* Tema claro */
+  --cor-fundo: #f6f5f1;
+  --cor-superficie: #ffffff;
+  --cor-superficie-2: #eeece6;
+  --cor-texto: #1c2321;
+  --cor-texto-suave: #4c5753;
+  --cor-borda: #d6d3c9;
+  --cor-borda-forte: #9a9a90;
+  --cor-destaque: #0a6863;
+  --cor-destaque-texto: #ffffff;
+  --cor-destaque-suave: #dcefed;
+  --cor-ferramentas: #1d5a9e;
+  --cor-ferramentas-suave: #e1ebf7;
+  --cor-defensiva: #8a4510;
+  --cor-defensiva-suave: #f6e8da;
+  --cor-ok: #16703a;
+  --cor-ok-suave: #e0f2e6;
+  --cor-erro: #b02a1f;
+  --cor-erro-suave: #fbe5e2;
+  --cor-alerta: #7d5200;
+  --cor-alerta-suave: #fbf0d4;
+  --cor-foco: #1d5a9e;
+
+  --term-fundo: #1e2326;
+  --term-texto: #e3e6e4;
+  --term-suave: #a9b3ae;
+  --term-prompt: #8cc8ff;
+  --term-erro: #ff9b8f;
+  --term-sel: #39424a;
+
+  --sombra: 0 1px 2px rgb(20 30 25 / 0.06), 0 4px 16px rgb(20 30 25 / 0.06);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --cor-fundo: #131719;
+  --cor-superficie: #1b2023;
+  --cor-superficie-2: #242a2e;
+  --cor-texto: #e6eae8;
+  --cor-texto-suave: #a9b3af;
+  --cor-borda: #353d41;
+  --cor-borda-forte: #66706c;
+  --cor-destaque: #5cc2b9;
+  --cor-destaque-texto: #0b1a19;
+  --cor-destaque-suave: #183433;
+  --cor-ferramentas: #8db7ee;
+  --cor-ferramentas-suave: #1b2a3c;
+  --cor-defensiva: #e7a666;
+  --cor-defensiva-suave: #352719;
+  --cor-ok: #6ccf90;
+  --cor-ok-suave: #16301f;
+  --cor-erro: #ff9b8f;
+  --cor-erro-suave: #3a1d1a;
+  --cor-alerta: #e9c063;
+  --cor-alerta-suave: #362b12;
+  --cor-foco: #8db7ee;
+
+  --term-fundo: #0e1113;
+  --term-sel: #2c343a;
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --cor-fundo: #131719;
+    --cor-superficie: #1b2023;
+    --cor-superficie-2: #242a2e;
+    --cor-texto: #e6eae8;
+    --cor-texto-suave: #a9b3af;
+    --cor-borda: #353d41;
+    --cor-borda-forte: #66706c;
+    --cor-destaque: #5cc2b9;
+    --cor-destaque-texto: #0b1a19;
+    --cor-destaque-suave: #183433;
+    --cor-ferramentas: #8db7ee;
+    --cor-ferramentas-suave: #1b2a3c;
+    --cor-defensiva: #e7a666;
+    --cor-defensiva-suave: #352719;
+    --cor-ok: #6ccf90;
+    --cor-ok-suave: #16301f;
+    --cor-erro: #ff9b8f;
+    --cor-erro-suave: #3a1d1a;
+    --cor-alerta: #e9c063;
+    --cor-alerta-suave: #362b12;
+    --cor-foco: #8db7ee;
+    --term-fundo: #0e1113;
+    --term-sel: #2c343a;
+    --sombra: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
+  }
+}

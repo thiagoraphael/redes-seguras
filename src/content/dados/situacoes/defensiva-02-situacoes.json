@@ -1,0 +1,80 @@
+{
+  "titulo": "Que ataque é esse?",
+  "instrucoes": "Leia a situação e escolha o tipo de ataque que melhor descreve o que aconteceu.",
+  "opcoes": [
+    { "id": "virus", "rotulo": "Vírus" },
+    { "id": "worm", "rotulo": "Worm" },
+    { "id": "trojan", "rotulo": "Trojan (cavalo de Troia)" },
+    { "id": "ransomware", "rotulo": "Ransomware" },
+    { "id": "spyware", "rotulo": "Spyware" },
+    { "id": "phishing", "rotulo": "Phishing" },
+    { "id": "ddos", "rotulo": "DoS/DDoS" },
+    { "id": "mitm", "rotulo": "Man in the middle" }
+  ],
+  "situacoes": [
+    {
+      "id": "s1",
+      "titulo": "Segunda-feira na clínica veterinária",
+      "texto": "A recepcionista da clínica liga o computador e não consegue abrir nenhuma ficha de paciente. Todos os arquivos ganharam uma extensão estranha, .lockd, e apareceu um arquivo LEIA-ME.txt na área de trabalho.\n\nO texto diz que os arquivos foram criptografados e que a chave só será enviada depois de um pagamento em criptomoeda, em até 72 horas.",
+      "resposta": "ransomware",
+      "pistas": ["Arquivos inacessíveis e criptografados", "Pedido de pagamento para devolver o acesso", "Prazo para pressionar a vítima"],
+      "explicacao": "Sequestrar os dados e cobrar resgate é a marca do ransomware. A saída aqui é restaurar o backup. Se o backup estava num HD ligado nesse mesmo computador, provavelmente foi criptografado também. Pagar não garante nada."
+    },
+    {
+      "id": "s2",
+      "titulo": "O escritório que ficou lento em uma hora",
+      "texto": "Num escritório de contabilidade com 12 computadores, um deles estava há meses sem receber atualizações do Windows. Numa tarde, ele é infectado.\n\nEm menos de uma hora, outros nove computadores da mesma rede apresentam o mesmo problema. Ninguém abriu anexo, ninguém clicou em link, ninguém pendurou pendrive. Os técnicos descobrem que o programa malicioso explorava uma falha já corrigida pela fabricante.",
+      "resposta": "worm",
+      "pistas": ["Espalhou sozinho de máquina em máquina", "Nenhuma ação dos usuários", "Explora falha conhecida em sistema desatualizado"],
+      "explicacao": "Se espalhar sozinho pela rede, explorando uma vulnerabilidade, é o que define o worm. Foi assim com o WannaCry em 2017. A defesa principal é manter tudo atualizado."
+    },
+    {
+      "id": "s3",
+      "titulo": "O ativador grátis",
+      "texto": "Um colega baixa de um site qualquer um \"ativador\" para usar um programa pago sem pagar. O ativador funciona: o programa abre normalmente.\n\nDuas semanas depois, alguém faz transferências da conta bancária dele. O antivírus, atualizado mais tarde, encontra no computador um programa escondido que registrava o que era digitado e mandava para fora.",
+      "resposta": "trojan",
+      "pistas": ["Parecia útil e funcionou", "A própria vítima instalou", "Fazia outra coisa escondida"],
+      "explicacao": "Programa que faz o que promete e também uma função escondida e maliciosa é um cavalo de Troia. O que ele carregava (registrar teclas e enviar) é comportamento de spyware, mas o jeito como chegou foi o do trojan: disfarçado de algo útil. Instale só de fonte oficial."
+    },
+    {
+      "id": "s4",
+      "titulo": "A encomenda retida",
+      "texto": "Chega um SMS: \"Ana, sua encomenda está retida na fiscalização. Para liberar, pague a taxa de R$ 39,90 até hoje às 23h59: rapidotucano-liberacao.example/pagar\".\n\nAna estava esperando uma compra. O site do link é parecido com o da transportadora, pede o CPF e mostra um QR code de Pix.",
+      "resposta": "phishing",
+      "pistas": ["Mensagem que finge ser de empresa conhecida", "Urgência (\"até hoje\")", "Link que não é o site oficial", "Pede dados e pagamento"],
+      "explicacao": "É phishing: uma mensagem falsa que usa um contexto real (ela esperava uma encomenda) para conseguir dados e dinheiro. Usar o primeiro nome da vítima deixa tudo mais convincente, mas não prova que é legítimo. Confira sempre pelo site oficial, digitando o endereço."
+    },
+    {
+      "id": "s5",
+      "titulo": "O celular que sabia demais",
+      "texto": "Depois do fim do namoro, Júlia percebe que o ex sabe onde ela esteve e comenta conversas que ela teve pelo celular. Ele já tinha pegado o aparelho dela algumas vezes, e sabia a senha.\n\nNa assistência técnica, encontram um aplicativo com nome genérico, \"Serviço do Sistema\", com permissão de localização, acessibilidade e acesso às notificações.",
+      "resposta": "spyware",
+      "pistas": ["Monitoramento escondido", "Envia informações para outra pessoa", "Instalado por alguém com acesso ao aparelho"],
+      "explicacao": "Programa que vigia o dispositivo e manda as informações para outra pessoa é spyware. Quando é instalado por alguém próximo para perseguir a vítima, recebe o nome de stalkerware, e o Brasil é um dos países com mais casos. Além de remover o app, é caso de trocar a senha e buscar apoio."
+    },
+    {
+      "id": "s6",
+      "titulo": "Black Friday fora do ar",
+      "texto": "Na Black Friday, o site de uma pequena loja de games sai do ar. Não houve invasão e nenhum dado foi roubado.\n\nOs logs mostram milhões de requisições por minuto vindas de milhares de endereços diferentes, de vários países. Muitos desses endereços são câmeras de segurança e roteadores domésticos com senha de fábrica.",
+      "resposta": "ddos",
+      "pistas": ["Objetivo é derrubar o serviço", "Muitas origens ao mesmo tempo", "Dispositivos infectados usados como botnet"],
+      "explicacao": "Sobrecarregar o serviço até ele cair é negação de serviço. Como vem de milhares de origens ao mesmo tempo, é um DDoS, normalmente feito com uma botnet de dispositivos mal protegidos. O dono daquela câmera nem sabe que participou do ataque."
+    },
+    {
+      "id": "s7",
+      "titulo": "O Wi-Fi da padaria",
+      "texto": "Na padaria aparecem duas redes: \"Padaria_Clientes\" e \"Padaria_Clientes_5G\", ambas abertas. A segunda foi criada pelo notebook de alguém sentado numa mesa no fundo.\n\nQuem se conecta nela navega normalmente, mas todo o tráfego passa pelo notebook dessa pessoa, que consegue ver os sites acessados e mexer nas páginas que não usam HTTPS.",
+      "resposta": "mitm",
+      "pistas": ["O atacante fica entre a vítima e a internet", "Pode ler e alterar o tráfego", "Rede falsa com nome parecido"],
+      "explicacao": "O atacante se colocou no meio da comunicação: é man in the middle. HTTPS protege o conteúdo, desde que você não ignore aviso de certificado. Em Wi-Fi público, evite banco e senhas importantes ou use VPN."
+    },
+    {
+      "id": "s8",
+      "titulo": "A planilha de orçamento",
+      "texto": "Um cliente manda por e-mail a planilha \"orcamento_reforma.xlsm\". Ao abrir, aparece o aviso para \"habilitar conteúdo\", e o funcionário clica.\n\nA partir daí, um código se copia para dentro de outras planilhas salvas no computador. Toda vez que o funcionário manda uma dessas planilhas para outra pessoa e ela abre e habilita o conteúdo, o problema se repete no computador dela.",
+      "resposta": "virus",
+      "pistas": ["Se insere em outros arquivos", "Depende de alguém abrir o arquivo", "Viaja junto com os arquivos enviados"],
+      "explicacao": "Código que se anexa a outros arquivos e se espalha quando eles são abertos é vírus (no caso, um vírus de macro). A diferença para o worm: o worm se espalha sozinho pela rede, o vírus depende de alguém abrir o arquivo. Mantenha macros desativadas e desconfie do aviso \"habilitar conteúdo\"."
+    }
+  ]
+}

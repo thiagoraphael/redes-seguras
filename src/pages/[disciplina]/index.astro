@@ -1,0 +1,46 @@
+---
+import Base from '@/layouts/Base.astro';
+import CardModulo from '@/components/ui/CardModulo.astro';
+import { modulosDa } from '@/lib/modulos';
+import { DISCIPLINAS, type Disciplina } from '@/lib/texto';
+
+export function getStaticPaths() {
+  return (Object.keys(DISCIPLINAS) as Disciplina[]).map((disciplina) => ({ params: { disciplina } }));
+}
+const disciplina = Astro.params.disciplina as Disciplina;
+const info = DISCIPLINAS[disciplina];
+const modulos = await modulosDa(disciplina);
+---
+<Base titulo={info.nome} descricao={info.descricao}>
+  <div class="container">
+    <header class="cab">
+      <span class={`etiqueta etiqueta-${disciplina}`}>{info.curto}</span>
+      <h1>{info.nome}</h1>
+      <p>{info.descricao}</p>
+    </header>
+    <ul class="grade">
+      {modulos.map((m) => <CardModulo modulo={m} />)}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .cab {
+    padding: var(--esp-6) 0 var(--esp-4);
+  }
+  .cab h1 {
+    margin: var(--esp-2) 0;
+  }
+  .cab p {
+    color: var(--cor-texto-suave);
+    font-size: var(--tam-lg);
+  }
+  .grade {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--esp-4);
+  }
+</style>

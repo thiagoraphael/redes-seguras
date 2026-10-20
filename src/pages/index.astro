@@ -1,0 +1,107 @@
+---
+import Base from '@/layouts/Base.astro';
+import CardModulo from '@/components/ui/CardModulo.astro';
+import { modulosDa } from '@/lib/modulos';
+import { DISCIPLINAS } from '@/lib/texto';
+import { url } from '@/lib/url';
+
+const ferramentas = await modulosDa('ferramentas');
+const defensiva = await modulosDa('defensiva');
+const grupos = [
+  { chave: 'ferramentas' as const, modulos: ferramentas },
+  { chave: 'defensiva' as const, modulos: defensiva },
+];
+---
+<Base titulo="Redes Seguras">
+  <div class="container">
+    <section class="hero">
+      <p class="hero-sobre">Técnico em Redes de Computadores, 2º período, CTP Barbacena</p>
+      <h1>Estude, pratique e erre à vontade.</h1>
+      <p class="hero-texto">
+        Aqui você lê a teoria de cada encontro, pratica num terminal e em simulações que dão retorno na hora, e
+        revisa com um quiz curto. Nada vale nota e nada sai do seu computador. As atividades avaliadas continuam no
+        papel, em sala.
+      </p>
+    </section>
+
+    <div class="disciplinas">
+      {
+        grupos.map((g) => (
+          <section class={`disciplina disciplina-${g.chave}`} aria-labelledby={`titulo-${g.chave}`}>
+            <h2 id={`titulo-${g.chave}`}>
+              <a href={url(`${g.chave}/`)}>{DISCIPLINAS[g.chave].nome}</a>
+            </h2>
+            <p class="disciplina-desc">{DISCIPLINAS[g.chave].descricao}</p>
+            <ul class="lista-cards">
+              {g.modulos.map((m) => (
+                <CardModulo modulo={m} />
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    padding: var(--esp-7) 0 var(--esp-6);
+    max-width: 760px;
+  }
+  .hero-sobre {
+    font-size: var(--tam-sm);
+    font-weight: 700;
+    color: var(--cor-destaque);
+    margin-bottom: var(--esp-2);
+  }
+  .hero h1 {
+    margin-bottom: var(--esp-3);
+  }
+  .hero-texto {
+    font-size: var(--tam-lg);
+    color: var(--cor-texto-suave);
+    line-height: 1.55;
+  }
+  .disciplinas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-6);
+  }
+  @media (max-width: 860px) {
+    .disciplinas {
+      grid-template-columns: 1fr;
+    }
+    .hero {
+      padding-top: var(--esp-5);
+    }
+  }
+  .disciplina h2 {
+    margin: 0 0 var(--esp-1);
+    font-size: var(--tam-xl);
+  }
+  .disciplina h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .disciplina h2 a:hover {
+    text-decoration: underline;
+  }
+  .disciplina-ferramentas h2 {
+    color: var(--cor-ferramentas);
+  }
+  .disciplina-defensiva h2 {
+    color: var(--cor-defensiva);
+  }
+  .disciplina-desc {
+    color: var(--cor-texto-suave);
+  }
+  .lista-cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-3);
+  }
+</style>

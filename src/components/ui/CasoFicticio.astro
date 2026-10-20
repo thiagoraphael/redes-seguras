@@ -1,0 +1,49 @@
+---
+/**
+ * Exemplo fictício, para quando não há caso real com fonte confiável.
+ * Visualmente diferente do CasoReal, para o aluno não confundir os dois.
+ * Props: titulo. O texto vai dentro.
+ */
+interface Props {
+  titulo: string;
+}
+const { titulo } = Astro.props;
+---
+<aside class="caso-ficticio">
+  <p class="cf-rotulo">Exemplo fictício</p>
+  <p class="cf-titulo">{titulo}</p>
+  <div class="cf-corpo"><slot /></div>
+  <p class="cf-nota">Situação inventada para a aula, baseada em como esse tipo de ataque costuma funcionar.</p>
+</aside>
+
+<style>
+  .caso-ficticio {
+    background: var(--cor-superficie);
+    border: 1px dashed var(--cor-borda-forte);
+    border-left: 5px solid var(--cor-texto-suave);
+    border-radius: var(--raio-sm);
+    padding: var(--esp-3) var(--esp-4);
+    margin: var(--esp-4) 0;
+  }
+  .cf-rotulo {
+    font-size: var(--tam-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--cor-texto-suave);
+    margin: 0;
+  }
+  .cf-titulo {
+    font-weight: 700;
+    margin: 0 0 var(--esp-2);
+  }
+  .cf-corpo :global(p:last-child) {
+    margin-bottom: var(--esp-2);
+  }
+  .cf-nota {
+    font-size: var(--tam-sm);
+    color: var(--cor-texto-suave);
+    font-style: italic;
+    margin: 0;
+  }
+</style>

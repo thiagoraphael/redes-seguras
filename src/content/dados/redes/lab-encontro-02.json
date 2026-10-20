@@ -1,0 +1,116 @@
+{
+  "descricao": "Servidor do laboratório (srv-lab) com SSH e servidor web, gateway, DNS interno, PC do professor, impressora e um servidor antigo em outra rede.",
+  "dominio": "lab.home.arpa",
+  "local": {
+    "hostname": "srv-lab",
+    "usuario": "aluno",
+    "interfaces": [
+      { "nome": "lo", "mac": "00:00:00:00:00:00", "ipv4": "127.0.0.1/8", "estado": "UNKNOWN", "mtu": 65536 },
+      { "nome": "enp0s3", "mac": "08:00:27:3a:1c:5e", "ipv4": "192.168.56.20/24", "estado": "UP", "mtu": 1500 },
+      { "nome": "enp0s8", "mac": "08:00:27:c1:7e:42", "estado": "DOWN", "mtu": 1500 }
+    ],
+    "rotas": [
+      { "destino": "default", "via": "192.168.56.1", "dev": "enp0s3", "proto": "static", "metric": 100 },
+      { "destino": "192.168.56.0/24", "dev": "enp0s3", "proto": "kernel", "scope": "link", "src": "192.168.56.20", "metric": 100 }
+    ],
+    "dnsServidores": ["192.168.56.53"],
+    "sockets": [
+      { "proto": "udp", "estado": "UNCONN", "local": "127.0.0.1:323", "processo": "chronyd", "pid": 690, "fd": 5, "dono": "_chrony" },
+      { "proto": "tcp", "estado": "LISTEN", "local": "0.0.0.0:22", "processo": "sshd", "pid": 801, "fd": 3 },
+      { "proto": "tcp", "estado": "LISTEN", "local": "0.0.0.0:8080", "processo": "nginx", "pid": 944, "fd": 6 },
+      { "proto": "tcp", "estado": "LISTEN", "local": "127.0.0.1:5432", "processo": "postgres", "pid": 1010, "fd": 7, "dono": "postgres" },
+      { "proto": "tcp", "estado": "LISTEN", "local": "[::]:22", "processo": "sshd", "pid": 801, "fd": 4 },
+      { "proto": "tcp", "estado": "ESTAB", "local": "192.168.56.20:22", "remoto": "192.168.56.30:51888", "processo": "sshd", "pid": 1320, "fd": 4 }
+    ]
+  },
+  "hosts": [
+    { "hostname": "gw", "ip": "192.168.56.1", "mac": "52:54:00:12:35:01", "latenciaMs": [0.3, 0.9] },
+    { "hostname": "dns01", "ip": "192.168.56.53", "mac": "08:00:27:5d:91:0a", "latenciaMs": [0.4, 1.1], "servicos": [{ "porta": 53, "proto": "udp", "nome": "domain" }] },
+    { "hostname": "prof-pc", "ip": "192.168.56.30", "mac": "08:00:27:b4:22:7c", "latenciaMs": [0.4, 1.3] },
+    { "hostname": "impressora", "ip": "192.168.56.40", "mac": "00:1b:a9:4e:07:33", "latenciaMs": [1.5, 4.8] },
+    { "hostname": "rt-adm", "ip": "10.0.0.1", "latenciaMs": [0.9, 1.8] },
+    { "hostname": "srv-legado", "ip": "10.0.0.15", "respondePing": false, "saltos": ["192.168.56.1", "10.0.0.1", "*", "*", "*"] }
+  ],
+  "dns": [
+    { "nome": "gw.lab.home.arpa", "tipo": "A", "valor": "192.168.56.1" },
+    { "nome": "srv-lab.lab.home.arpa", "tipo": "A", "valor": "192.168.56.20" },
+    { "nome": "prof-pc.lab.home.arpa", "tipo": "A", "valor": "192.168.56.30" },
+    { "nome": "impressora.lab.home.arpa", "tipo": "A", "valor": "192.168.56.40" },
+    { "nome": "dns01.lab.home.arpa", "tipo": "A", "valor": "192.168.56.53" },
+    { "nome": "rt-adm.lab.home.arpa", "tipo": "A", "valor": "10.0.0.1" },
+    { "nome": "srv-legado.lab.home.arpa", "tipo": "A", "valor": "10.0.0.15" },
+    { "nome": "intranet.lab.home.arpa", "tipo": "CNAME", "valor": "srv-lab.lab.home.arpa" },
+    { "nome": "lab.home.arpa", "tipo": "NS", "valor": "dns01.lab.home.arpa", "ttl": 3600 },
+    { "nome": "lab.home.arpa", "tipo": "TXT", "valor": "Rede isolada do laboratorio. Nao sai para a internet.", "ttl": 3600 }
+  ],
+  "capturas": [
+    {
+      "interface": "enp0s3",
+      "linhas": [
+        { "t": "14:02:10.881204", "proto": "arp", "info": "Request who-has 192.168.56.1 tell 192.168.56.20, length 28" },
+        { "t": "14:02:10.881611", "proto": "arp", "info": "Reply 192.168.56.1 is-at 52:54:00:12:35:01, length 46" },
+        { "t": "14:02:11.104233", "proto": "udp", "src": "192.168.56.20", "sport": 41022, "dst": "192.168.56.53", "dport": 53, "info": "4821+ A? intranet.lab.home.arpa. (40)" },
+        { "t": "14:02:11.105102", "proto": "udp", "src": "192.168.56.53", "sport": 53, "dst": "192.168.56.20", "dport": 41022, "info": "4821* 2/0/0 CNAME srv-lab.lab.home.arpa., A 192.168.56.20 (79)" },
+        { "t": "14:02:12.310877", "proto": "icmp", "src": "192.168.56.20", "dst": "192.168.56.1", "info": "ICMP echo request, id 3, seq 1, length 64" },
+        { "t": "14:02:12.311290", "proto": "icmp", "src": "192.168.56.1", "dst": "192.168.56.20", "info": "ICMP echo reply, id 3, seq 1, length 64" },
+        { "t": "14:02:13.552019", "proto": "tcp", "src": "192.168.56.30", "sport": 51920, "dst": "192.168.56.20", "dport": 8080, "info": "Flags [S], seq 1893322113, win 64240, options [mss 1460,sackOK,TS val 1022 ecr 0,nop,wscale 7], length 0" },
+        { "t": "14:02:13.552101", "proto": "tcp", "src": "192.168.56.20", "sport": 8080, "dst": "192.168.56.30", "dport": 51920, "info": "Flags [S.], seq 2210931455, ack 1893322114, win 65160, options [mss 1460,sackOK,TS val 553 ecr 1022,nop,wscale 7], length 0" },
+        { "t": "14:02:13.552398", "proto": "tcp", "src": "192.168.56.30", "sport": 51920, "dst": "192.168.56.20", "dport": 8080, "info": "Flags [.], ack 1, win 502, options [nop,nop,TS val 1023 ecr 553], length 0" },
+        { "t": "14:02:13.552740", "proto": "tcp", "src": "192.168.56.30", "sport": 51920, "dst": "192.168.56.20", "dport": 8080, "info": "Flags [P.], seq 1:87, ack 1, win 502, options [nop,nop,TS val 1023 ecr 553], length 86: HTTP: GET / HTTP/1.1" },
+        { "t": "14:02:13.553311", "proto": "tcp", "src": "192.168.56.20", "sport": 8080, "dst": "192.168.56.30", "dport": 51920, "info": "Flags [P.], seq 1:413, ack 87, win 509, options [nop,nop,TS val 554 ecr 1023], length 412: HTTP: HTTP/1.1 200 OK" },
+        { "t": "14:02:14.020551", "proto": "tcp", "src": "192.168.56.30", "sport": 51888, "dst": "192.168.56.20", "dport": 22, "info": "Flags [P.], seq 2077:2129, ack 3841, win 501, options [nop,nop,TS val 1490 ecr 1021], length 52" },
+        { "t": "14:02:14.020874", "proto": "tcp", "src": "192.168.56.20", "sport": 22, "dst": "192.168.56.30", "dport": 51888, "info": "Flags [.], ack 2129, win 501, options [nop,nop,TS val 1022 ecr 1490], length 0" }
+      ]
+    }
+  ],
+  "missoes": [
+    {
+      "id": "ip-local",
+      "enunciado": "Qual é o endereço IPv4 desta máquina na interface enp0s3?",
+      "dica": "Liste os endereços e procure a linha que começa com inet dentro do bloco da enp0s3.",
+      "comandosSugeridos": ["ip a", "ip -br a"],
+      "resposta": { "tipo": "umDe", "valores": ["192.168.56.20", "192.168.56.20/24"] },
+      "explicacao": "Na linha \"inet 192.168.56.20/24\", o número antes da barra é o IP e o /24 é a máscara (255.255.255.0). A lo (127.0.0.1) é a interface de loopback, que só fala com a própria máquina."
+    },
+    {
+      "id": "gateway",
+      "enunciado": "Descubra o gateway padrão desta máquina.",
+      "dica": "A tabela de rotas tem uma linha chamada default.",
+      "comandosSugeridos": ["ip r"],
+      "resposta": { "tipo": "exata", "valor": "192.168.56.1" },
+      "explicacao": "A rota \"default via 192.168.56.1\" diz: tudo que não for da rede 192.168.56.0/24 é entregue para o 192.168.56.1, que é o roteador da rede."
+    },
+    {
+      "id": "porta-web",
+      "enunciado": "O nginx (servidor web) está escutando em qual porta TCP?",
+      "dica": "Liste as portas TCP em escuta, com números. Para ver o nome dos processos, use sudo.",
+      "comandosSugeridos": ["ss -tln", "sudo ss -tlnp"],
+      "resposta": { "tipo": "umDe", "valores": ["8080", "tcp/8080", ":8080"] },
+      "explicacao": "A linha 0.0.0.0:8080 com o processo nginx mostra que o servidor web escuta na porta 8080, em todas as interfaces (0.0.0.0). Não é a 80 padrão. Repare também no postgres em 127.0.0.1:5432: ele só aceita conexões da própria máquina, o que é uma boa prática."
+    },
+    {
+      "id": "dns-intranet",
+      "enunciado": "O nome intranet.lab.home.arpa aponta para qual endereço IP?",
+      "dica": "Consulte o DNS. Repare que a resposta tem um CNAME no meio do caminho.",
+      "comandosSugeridos": ["dig intranet.lab.home.arpa", "dig +short intranet.lab.home.arpa"],
+      "resposta": { "tipo": "exata", "valor": "192.168.56.20" },
+      "explicacao": "O DNS responde que intranet é um apelido (CNAME) de srv-lab.lab.home.arpa, e srv-lab tem o registro A 192.168.56.20. Ou seja, a intranet roda nesta própria máquina."
+    },
+    {
+      "id": "traceroute-legado",
+      "enunciado": "O srv-legado (10.0.0.15) não responde. Qual é o IP do último roteador que respondeu no caminho até ele?",
+      "dica": "Primeiro tente o ping. Depois veja o caminho com traceroute. As linhas com * * * são saltos que não responderam.",
+      "comandosSugeridos": ["ping -c 3 srv-legado", "traceroute -n 10.0.0.15"],
+      "resposta": { "tipo": "exata", "valor": "10.0.0.1" },
+      "explicacao": "O caminho passa pelo gateway (192.168.56.1) e pelo roteador 10.0.0.1. Depois disso só aparecem asteriscos. O problema está depois do 10.0.0.1: o servidor pode estar desligado ou um firewall pode estar descartando os pacotes. Nossa rede e o gateway estão funcionando."
+    },
+    {
+      "id": "tcpdump-8080",
+      "enunciado": "Na captura da interface enp0s3, qual máquina (IP) abriu uma conexão com o servidor web na porta 8080?",
+      "dica": "Capture com sudo, sem converter nomes (-n), filtrando pela porta. Procure o pacote com Flags [S], que é o início da conexão TCP.",
+      "comandosSugeridos": ["sudo tcpdump -n -i enp0s3 port 8080"],
+      "resposta": { "tipo": "exata", "valor": "192.168.56.30" },
+      "explicacao": "O primeiro pacote, com Flags [S] (SYN), sai de 192.168.56.30 (o PC do professor) para 192.168.56.20.8080. Depois vem o [S.] (SYN-ACK) e o [.] (ACK): é o aperto de mão de três vias do TCP, seguido do GET / e da resposta 200 OK."
+    }
+  ]
+}

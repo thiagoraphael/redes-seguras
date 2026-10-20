@@ -1,0 +1,145 @@
+---
+import type { Modulo } from '@/lib/modulos';
+import { slugDoModulo } from '@/lib/modulos';
+import { url } from '@/lib/url';
+import { formatarData } from '@/lib/texto';
+import { idAtividade, idQuiz } from '@/lib/ids';
+
+interface Props {
+  modulo: Modulo;
+}
+const { modulo: m } = Astro.props;
+const d = m.data;
+const href = url(`${d.disciplina}/${slugDoModulo(m)}/`);
+const atividades = d.lab.map((a) => idAtividade(m.id, a.dados.id));
+---
+<li class:list={['card', `card-${d.disciplina}`, { 'card-bloqueado': !d.liberado }]}>
+  <p class="card-meta">
+    <span>Encontro {d.encontro}</span>
+    {d.data && <span>{formatarData(d.data)}</span>}
+  </p>
+  {
+    d.liberado ? (
+      <a class="card-titulo" href={href}>
+        {d.titulo}
+      </a>
+    ) : (
+      <p class="card-titulo">{d.titulo}</p>
+    )
+  }
+  <p class="card-resumo">{d.resumo}</p>
+  {
+    d.liberado ? (
+      <p
+        class="card-progresso"
+        data-progresso
+        data-modulo={m.id}
+        data-atividades={atividades.join(',')}
+        data-quiz={d.quiz ? idQuiz(m.id) : ''}
+      >
+        <span class="etiqueta etiqueta-ok">Liberado</span>
+      </p>
+    ) : (
+      <p class="card-progresso">
+        <span class="etiqueta etiqueta-neutra">Em breve</span>
+      </p>
+    )
+  }
+</li>
+
+<style>
+  .card {
+    position: relative;
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-top: 4px solid var(--cor-borda-forte);
+    border-radius: var(--raio-sm);
+    padding: var(--esp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-2);
+  }
+  .card-ferramentas {
+    border-top-color: var(--cor-ferramentas);
+  }
+  .card-defensiva {
+    border-top-color: var(--cor-defensiva);
+  }
+  .card:has(a:hover) {
+    box-shadow: var(--sombra);
+  }
+  .card-bloqueado {
+    border-top-color: var(--cor-borda);
+    background: transparent;
+  }
+  .card p {
+    margin: 0;
+  }
+  .card-meta {
+    display: flex;
+    gap: var(--esp-3);
+    font-size: var(--tam-xs);
+    font-weight: 700;
+    color: var(--cor-texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card-titulo {
+    font-size: var(--tam-lg);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--cor-texto);
+    text-decoration: none;
+  }
+  a.card-titulo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  a.card-titulo:hover {
+    color: var(--cor-destaque);
+  }
+  a.card-titulo:focus-visible {
+    outline: none;
+  }
+  .card:has(a.card-titulo:focus-visible) {
+    outline: 3px solid var(--cor-foco);
+    outline-offset: 2px;
+  }
+  .card-resumo {
+    font-size: var(--tam-sm);
+    color: var(--cor-texto-suave);
+  }
+  .card-progresso {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--esp-1);
+    margin-top: auto !important;
+    padding-top: var(--esp-2);
+  }
+</style>
+
+<script>
+  import { EVENTO, lerProgresso } from '@/lib/progresso';
+
+  function pintar() {
+    const p = lerProgresso();
+    document.querySelectorAll<HTMLElement>('[data-progresso]').forEach((el) => {
+      const etiquetas: string[] = ['<span class="etiqueta etiqueta-ok">Liberado</span>'];
+      if (p.vistos[el.dataset.modulo!]) etiquetas.push('<span class="etiqueta etiqueta-neutra">Visto</span>');
+      (el.dataset.atividades ?? '')
+        .split(',')
+        .filter(Boolean)
+        .forEach((a) => {
+          const feitos = p.concluidos[a]?.length ?? 0;
+          const total = p.totais[a];
+          if (feitos && total) etiquetas.push(`<span class="etiqueta etiqueta-neutra">Prática ${Math.min(feitos, total)}/${total}</span>`);
+        });
+      const q = el.dataset.quiz ? p.quizzes[el.dataset.quiz] : undefined;
+      if (q) etiquetas.push(`<span class="etiqueta etiqueta-neutra">Quiz ${q.acertos}/${q.total}</span>`);
+      el.innerHTML = etiquetas.join(' ');
+    });
+  }
+  pintar();
+  window.addEventListener(EVENTO, pintar);
+</script>

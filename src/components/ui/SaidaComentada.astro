@@ -1,0 +1,126 @@
+---
+/**
+ * Saída de terminal com notas numeradas, para a teoria.
+ * A saída vai como bloco de código dentro do componente (preserva os espaços):
+ *
+ *   <SaidaComentada comando="ip r" notas={[{ linha: 1, texto: 'Rota padrão' }]}>
+ *   ```
+ *   default via 192.168.56.1 dev enp0s3
+ *   ```
+ *   </SaidaComentada>
+ *
+ * Props:
+ *  - comando: string  comando digitado (mostrado com o prompt)
+ *  - notas: { linha: number; texto: string }[]  linha começa em 1; texto aceita HTML simples
+ *  - prompt?: string  padrão "aluno@srv-lab:~$"
+ *  - saida?: string   alternativa ao bloco de código, só para saídas sem recuo
+ */
+interface Props {
+  comando: string;
+  saida?: string;
+  notas?: { linha: number; texto: string }[];
+  prompt?: string;
+}
+const { comando, saida, notas = [], prompt = 'aluno@srv-lab:~$' } = Astro.props;
+
+function textoDoBloco(html: string): string {
+  const m = /<code[^>]*>([\s\S]*?)<\/code>/.exec(html);
+  const bruto = (m ? m[1]! : html).replace(/<[^>]+>/g, '');
+  return bruto
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/g, "'")
+    .replace(/&amp;/g, '&');
+}
+const texto = saida ?? (Astro.slots.has('default') ? textoDoBloco(await Astro.slots.render('default')) : '');
+const linhas = texto.replace(/^\n/, '').replace(/\n\s*$/, '').split('\n');
+const marcador = new Map<number, number>();
+notas.forEach((n, i) => marcador.set(n.linha, i + 1));
+---
+<figure class="saida-comentada">
+  <div class="sc-terminal" role="region" aria-label={`Exemplo de saída do comando ${comando}`} tabindex="0">
+    <pre><code><span class="sc-prompt">{prompt}</span> <span class="sc-cmd">{comando}</span>
+{linhas.map((l, i) => (
+  <span class:list={['sc-linha', { 'sc-marcada': marcador.has(i + 1) }]}>{marcador.has(i + 1) && <span class="sc-num" aria-hidden="true">{marcador.get(i + 1)}</span>}{l}
+</span>
+))}</code></pre>
+  </div>
+  {
+    notas.length > 0 && (
+      <figcaption>
+        <ol class="sc-notas">
+          {notas.map((n) => (
+            <li>
+              <span class="sr-only">Linha {n.linha}: </span>
+              <Fragment set:html={n.texto} />
+            </li>
+          ))}
+        </ol>
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .saida-comentada {
+    margin: var(--esp-4) 0 var(--esp-5);
+  }
+  .sc-terminal {
+    background: var(--term-fundo);
+    color: var(--term-texto);
+    border-radius: var(--raio-sm) var(--raio-sm) 0 0;
+    overflow-x: auto;
+  }
+  .sc-terminal pre {
+    overflow: visible;
+    margin: 0;
+    padding: var(--esp-3) var(--esp-4);
+    line-height: 1.5;
+    font-size: var(--tam-sm);
+  }
+  .sc-prompt {
+    color: var(--term-prompt);
+  }
+  .sc-cmd {
+    font-weight: 700;
+  }
+  .sc-linha {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    white-space: pre;
+  }
+  .sc-marcada {
+    background: var(--term-sel);
+  }
+  .sc-num {
+    display: inline-block;
+    min-width: 1.4em;
+    margin-right: 0.6em;
+    margin-left: -0.3em;
+    text-align: center;
+    border-radius: 999px;
+    background: var(--term-prompt);
+    color: var(--term-fundo);
+    font-weight: 700;
+    font-family: var(--fonte-texto);
+    font-size: 0.8em;
+  }
+  figcaption {
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-top: 0;
+    border-radius: 0 0 var(--raio-sm) var(--raio-sm);
+    padding: var(--esp-3) var(--esp-4);
+  }
+  .sc-notas {
+    margin: 0;
+    padding-left: 1.5em;
+    font-size: var(--tam-sm);
+  }
+  .sc-notas li::marker {
+    font-weight: 700;
+    color: var(--cor-destaque);
+  }
+</style>
