@@ -23,7 +23,17 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - name: Instalar dependências
+        run: |
+          npm ci
+          # Contorna um bug do npm com dependências opcionais (npm/cli#4828): se o binário
+          # nativo do compilador do Astro não veio, instala a versão que está no lockfile.
+          BIN=@astrojs/compiler-binding-linux-x64-gnu
+          if ! node -e "require('$BIN')" 2>/dev/null; then
+            VERSAO=$(node -p "require('./package-lock.json').packages['node_modules/$BIN'].version")
+            echo "Binário nativo ausente, instalando $BIN@$VERSAO"
+            npm install --no-save "$BIN@$VERSAO"
+          fi
       - run: npm test
       - name: Build
         run: npm run build
