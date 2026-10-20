@@ -1,0 +1,20 @@
+{
+  "titulo": "Clínica Patas & Cia: qual pilar quebrou?",
+  "contexto": "Oito problemas que aconteceram (ou podem acontecer) na clínica. Cada um quebra principalmente um pilar da tríade CIA.",
+  "instrucoes": "Arraste cada problema para o pilar que ele quebra, ou selecione com Enter (ou toque) e escolha a coluna.",
+  "colunas": [
+    { "id": "c", "rotulo": "Confidencialidade", "descricao": "Visto por quem não devia" },
+    { "id": "i", "rotulo": "Integridade", "descricao": "Alterado sem permissão ou por erro" },
+    { "id": "d", "rotulo": "Disponibilidade", "descricao": "Existe, mas ninguém consegue usar" }
+  ],
+  "itens": [
+    { "id": "x1", "texto": "Um estagiário tira foto da tela com a lista de tutores e telefones e posta no story", "coluna": "c", "explicacao": "Dados pessoais ficaram visíveis para quem não devia ver. Nada foi alterado nem ficou fora do ar." },
+    { "id": "x2", "texto": "A internet da clínica cai e o sistema de agendamento, que fica na nuvem, não abre a manhã inteira", "coluna": "d", "explicacao": "Os dados continuam lá e corretos, mas ninguém consegue acessar quando precisa." },
+    { "id": "x3", "texto": "Alguém troca a data da vacina antirrábica de um cão no sistema e ele fica sem a dose", "coluna": "i", "explicacao": "A informação foi alterada e deixou de ser verdadeira, com consequência real para o animal." },
+    { "id": "x4", "texto": "O computador da recepção fica desbloqueado na hora do almoço, com o prontuário aberto, de frente para a sala de espera", "coluna": "c", "explicacao": "Qualquer pessoa na sala de espera pode ler. O risco é de exposição." },
+    { "id": "x5", "texto": "Um ransomware criptografa o servidor e a clínica não consegue abrir nenhuma ficha", "coluna": "d", "explicacao": "O efeito principal é a falta de acesso. Muitos ransomwares também copiam os dados antes, e aí atingiriam a confidencialidade, mas o que a clínica sente primeiro é não conseguir trabalhar." },
+    { "id": "x6", "texto": "A recepcionista digita 450 em vez de 45 no valor da consulta e o tutor é cobrado errado", "coluna": "i", "explicacao": "Erro humano também quebra a integridade: o dado ficou errado, sem ataque nenhum." },
+    { "id": "x7", "texto": "O e-mail com os exames de um gato é enviado para o tutor errado", "coluna": "c", "explicacao": "A informação chegou a quem não devia. É um vazamento, ainda que por engano." },
+    { "id": "x8", "texto": "Falta energia no bairro, a clínica não tem nobreak e o servidor desliga no meio do expediente", "coluna": "d", "explicacao": "Ninguém roubou nem alterou nada, mas o sistema ficou indisponível. Disponibilidade também depende de energia e infraestrutura." }
+  ]
+}

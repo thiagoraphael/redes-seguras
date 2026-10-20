@@ -1,0 +1,90 @@
+{
+  "titulo": "Pode ou não pode?",
+  "instrucoes": "Leia a situação e decida.",
+  "opcoes": [
+    {
+      "id": "pode",
+      "rotulo": "Pode: tem autorização"
+    },
+    {
+      "id": "crime",
+      "rotulo": "Não pode: sem autorização (crime)"
+    },
+    {
+      "id": "regra",
+      "rotulo": "Não pode: quebra a regra do lab"
+    }
+  ],
+  "situacoes": [
+    {
+      "id": "e1",
+      "titulo": "O contrato da clínica",
+      "texto": "Você foi contratado pela Clínica Patas & Cia para fazer um inventário da rede. O contrato, assinado pela dona, diz que você pode varrer a rede 192.168.10.0/24 durante o sábado. No sábado, você roda o nmap nessa faixa.",
+      "resposta": "pode",
+      "pistas": [
+        "Autorização por escrito",
+        "Quem assinou é a dona da rede",
+        "Você ficou dentro da faixa e do dia combinados"
+      ],
+      "explicacao": "Esse é o cenário A da aula: o mesmo comando que seria crime vira trabalho porque existe autorização por escrito de quem é dono da rede, com escopo definido."
+    },
+    {
+      "id": "e2",
+      "titulo": "O Wi-Fi do vizinho",
+      "texto": "Seu vizinho reclama que a internet dele está lenta. Sem falar nada com ele, você conecta no Wi-Fi dele (a senha estava num adesivo do roteador) e roda uma varredura para ver quantos aparelhos estão ligados.",
+      "resposta": "crime",
+      "pistas": [
+        "Ninguém pediu",
+        "A rede é de outra pessoa",
+        "Saber a senha não é autorização"
+      ],
+      "explicacao": "Mesmo com boa intenção, ninguém te autorizou. E desde 2021 nem importa se havia senha ou não: o que caracteriza o crime do art. 154-A é a falta de autorização."
+    },
+    {
+      "id": "e3",
+      "titulo": "Treino em casa",
+      "texto": "Você quer treinar o que viu na aula. Em casa, sem perguntar ao professor, você conecta seu notebook no Wi-Fi da escola pelo celular do colega e roda uma captura de pacotes para ver o tráfego.",
+      "resposta": "regra",
+      "pistas": [
+        "Rede da escola",
+        "Fora da rede interna do lab"
+      ],
+      "explicacao": "A regra 2 do lab proíbe exatamente isso: nunca na rede ou no Wi-Fi da escola. E como você não tem autorização de quem administra essa rede, também pode ser enquadrado como crime. Na dúvida, pergunte antes."
+    },
+    {
+      "id": "e4",
+      "titulo": "A VM alvo em bridge",
+      "texto": "Na aula, a VM alvo não pega IP. Para resolver rápido, você muda a placa de rede dela para modo bridge, e ela passa a aparecer na rede do laboratório da escola.",
+      "resposta": "regra",
+      "pistas": [
+        "VM vulnerável de propósito",
+        "Bridge expõe a VM para fora do lab"
+      ],
+      "explicacao": "A regra 3 diz que a VM alvo nunca fica em bridge ou NAT. Ela é vulnerável de propósito: em bridge, qualquer máquina da rede da escola poderia atacá-la, e ela poderia servir de porta de entrada. Chame o professor."
+    },
+    {
+      "id": "e5",
+      "titulo": "O contrato que acabou",
+      "texto": "Você fez a manutenção da rede de um escritório até o mês passado, quando o contrato terminou. Você ainda lembra a senha do roteador e, por curiosidade, entra de casa para ver se está tudo funcionando e roda uma varredura.",
+      "resposta": "crime",
+      "pistas": [
+        "O contrato terminou",
+        "Ter a senha não é autorização",
+        "Ninguém pediu"
+      ],
+      "explicacao": "A autorização valia enquanto o contrato existia. Acabou o contrato, acabou a autorização. Entrar no equipamento de outra pessoa sem autorização é o que o art. 154-A descreve, mesmo que você conheça a senha e não pretenda causar dano."
+    },
+    {
+      "id": "e6",
+      "titulo": "Lab de quinta-feira",
+      "texto": "Na aula, dentro da rede interna labseg, você roda o nmap a partir do Kali contra a VM alvo da sua bancada, seguindo a ficha do professor.",
+      "resposta": "pode",
+      "pistas": [
+        "Rede interna do lab",
+        "Máquina da turma",
+        "Atividade orientada"
+      ],
+      "explicacao": "É exatamente o que a regra 1 permite: varredura só na rede interna do lab, contra máquinas da turma. A escola e o professor autorizam esse ambiente."
+    }
+  ]
+}

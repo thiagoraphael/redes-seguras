@@ -1,0 +1,65 @@
+{
+  "titulo": "Revisão rápida: conceitos base",
+  "questoes": [
+    {
+      "id": "q1",
+      "enunciado": "O peso de um animal é alterado no sistema de 32 kg para 3,2 kg e a dose do remédio sai errada. Qual pilar da tríade CIA foi quebrado?",
+      "alternativas": [
+        { "id": "a", "texto": "Confidencialidade" },
+        { "id": "b", "texto": "Integridade" },
+        { "id": "c", "texto": "Disponibilidade" },
+        { "id": "d", "texto": "Nenhum, foi só um erro de digitação" }
+      ],
+      "correta": "b",
+      "explicacao": "A informação foi alterada e ficou errada. Isso é quebra de integridade, seja por ataque ou por erro humano."
+    },
+    {
+      "id": "q2",
+      "enunciado": "Na frase \"golpista usa a senha 123456 para entrar no cadastro de clientes\", qual é a vulnerabilidade?",
+      "alternativas": [
+        { "id": "a", "texto": "O golpista" },
+        { "id": "b", "texto": "O cadastro de clientes" },
+        { "id": "c", "texto": "A senha 123456" },
+        { "id": "d", "texto": "A internet" }
+      ],
+      "correta": "c",
+      "explicacao": "O golpista é a ameaça e o cadastro é o ativo. A senha fraca é a fraqueza que deixa a ameaça chegar ao ativo, e é ela que o técnico consegue corrigir."
+    },
+    {
+      "id": "q3",
+      "enunciado": "Dois PCs têm a mesma senha fraca: um só toca música na recepção, o outro é do financeiro. Por que o risco é diferente?",
+      "alternativas": [
+        { "id": "a", "texto": "Porque a ameaça é diferente." },
+        { "id": "b", "texto": "Porque o impacto de um ataque no PC do financeiro é muito maior." },
+        { "id": "c", "texto": "Porque o PC da recepção é mais novo." },
+        { "id": "d", "texto": "Não é diferente: mesma senha, mesmo risco." }
+      ],
+      "correta": "b",
+      "explicacao": "Risco junta chance e impacto. A chance é a mesma, mas o estrago de um invasor no financeiro é muito maior. Por isso ele vem primeiro na lista."
+    },
+    {
+      "id": "q4",
+      "enunciado": "A clínica perdeu o prontuário porque o único backup estava no mesmo HD. Qual camada faltou?",
+      "alternativas": [
+        { "id": "a", "texto": "Backup 3-2-1: 3 cópias, em 2 mídias diferentes, 1 fora do local" },
+        { "id": "b", "texto": "Antivírus mais caro" },
+        { "id": "c", "texto": "Wi-Fi com senha mais forte" },
+        { "id": "d", "texto": "Mais memória no servidor" }
+      ],
+      "correta": "a",
+      "explicacao": "Uma cópia no mesmo HD some junto com o original. O 3-2-1 garante que sempre sobra uma cópia em outro lugar."
+    },
+    {
+      "id": "q5",
+      "enunciado": "Apareceu a tela de resgate na recepção. Qual deve ser a primeira ação?",
+      "alternativas": [
+        { "id": "a", "texto": "Formatar o computador para limpar o vírus." },
+        { "id": "b", "texto": "Pagar o resgate rápido, antes que o preço suba." },
+        { "id": "c", "texto": "Isolar a máquina da rede." },
+        { "id": "d", "texto": "Esperar para ver se resolve sozinho." }
+      ],
+      "correta": "c",
+      "explicacao": "Primeiro isolar, para o problema não se espalhar. Depois avisar quem precisa saber e preservar evidência. Formatar logo de cara apaga o que poderia explicar como tudo começou."
+    }
+  ]
+}

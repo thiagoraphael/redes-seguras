@@ -1,0 +1,65 @@
+{
+  "titulo": "Revisão rápida: apresentação, ética e regras",
+  "questoes": [
+    {
+      "id": "q1",
+      "enunciado": "Dois técnicos rodam o mesmo comando nmap em redes de outras pessoas. Um está trabalhando e o outro cometendo crime. O que faz a diferença?",
+      "alternativas": [
+        { "id": "a", "texto": "A ferramenta usada." },
+        { "id": "b", "texto": "A autorização por escrito do dono da rede." },
+        { "id": "c", "texto": "O horário em que o comando foi rodado." },
+        { "id": "d", "texto": "Se a rede tinha senha ou não." }
+      ],
+      "correta": "b",
+      "explicacao": "O comando é o mesmo. O que muda é a autorização. Sem autorização expressa de quem é dono da rede, é crime."
+    },
+    {
+      "id": "q2",
+      "enunciado": "O que mudou no art. 154-A do Código Penal com a Lei 14.155/2021 em relação a \"mecanismo de segurança\"?",
+      "alternativas": [
+        { "id": "a", "texto": "Passou a exigir que o invasor quebre uma senha." },
+        { "id": "b", "texto": "Deixou de exigir a violação de mecanismo de segurança: basta faltar autorização." },
+        { "id": "c", "texto": "Passou a valer só para empresas." },
+        { "id": "d", "texto": "Nada mudou, só o número do artigo." }
+      ],
+      "correta": "b",
+      "explicacao": "Em 2012 o texto dizia \"mediante violação indevida de mecanismo de segurança\". Em 2021 esse trecho saiu. Invadir dispositivo sem autorização já é crime, mesmo sem senha."
+    },
+    {
+      "id": "q3",
+      "enunciado": "Qual é a pena básica do art. 154-A hoje?",
+      "alternativas": [
+        { "id": "a", "texto": "Detenção, de 3 meses a 1 ano, e multa." },
+        { "id": "b", "texto": "Apenas multa." },
+        { "id": "c", "texto": "Reclusão, de 1 a 4 anos, e multa." },
+        { "id": "d", "texto": "Reclusão, de 10 a 20 anos." }
+      ],
+      "correta": "c",
+      "explicacao": "A Lei 14.155/2021 aumentou a pena básica para reclusão de 1 a 4 anos e multa. A detenção de 3 meses a 1 ano era a pena original, de 2012."
+    },
+    {
+      "id": "q4",
+      "enunciado": "Pelas regras do nosso lab, onde podemos fazer varredura e captura?",
+      "alternativas": [
+        { "id": "a", "texto": "Só na rede interna do lab, contra máquinas da turma." },
+        { "id": "b", "texto": "Em qualquer rede da escola, já que somos alunos." },
+        { "id": "c", "texto": "Em sites da internet, para praticar com alvos reais." },
+        { "id": "d", "texto": "No Wi-Fi da escola, desde que seja rápido." }
+      ],
+      "correta": "a",
+      "explicacao": "Tudo fica dentro da rede interna do lab (labseg). Rede e Wi-Fi da escola e alvos da internet estão fora da caixa."
+    },
+    {
+      "id": "q5",
+      "enunciado": "Por que a VM alvo nunca pode ficar em modo bridge ou NAT?",
+      "alternativas": [
+        { "id": "a", "texto": "Porque fica mais lenta." },
+        { "id": "b", "texto": "Porque ela é vulnerável de propósito e não pode ficar exposta fora do lab." },
+        { "id": "c", "texto": "Porque o Kali não consegue enxergá-la nesses modos." },
+        { "id": "d", "texto": "Porque gasta mais memória do computador." }
+      ],
+      "correta": "b",
+      "explicacao": "A VM alvo tem falhas deixadas de propósito para a aula. Em bridge ou NAT ela ficaria ao alcance de outras redes, virando um risco real."
+    }
+  ]
+}

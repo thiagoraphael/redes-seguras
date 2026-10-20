@@ -1,0 +1,126 @@
+---
+disciplina: ferramentas
+encontro: 1
+data: 2026-10-19
+titulo: Apresentação, ética e regras do lab
+resumo: O que vamos fazer no ano, por que a mesma ferramenta pode ser trabalho ou crime e as regras do nosso laboratório.
+liberado: true
+objetivos:
+  - Entender a diferença entre esta disciplina e Segurança Defensiva
+  - Saber o que vem em cada etapa do ano
+  - Explicar por que o que separa trabalho de crime é a autorização por escrito
+  - Conhecer o que diz o art. 154-A do Código Penal
+  - Seguir as regras do laboratório
+lab:
+  tipo: situacoes
+  dados: ferramentas-01-etica
+  titulo: "Simulação: pode ou não pode?"
+  intro: Seis situações que um técnico de redes pode viver. Para cada uma, decida se pode fazer, se é crime ou se quebra as regras do nosso lab.
+quiz: ferramentas-01
+referencias:
+  - titulo: "Lei nº 12.737, de 30 de novembro de 2012 (Lei Carolina Dieckmann)"
+    url: https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12737.htm
+  - titulo: "Lei nº 14.155, de 27 de maio de 2021"
+    url: https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14155.htm
+---
+
+## Operar e decidir
+
+Esta disciplina tem uma irmã: **Segurança Defensiva**, que acontece logo depois desta, às 15:25. As duas trabalham na mesma rede, mas com papéis diferentes.
+
+| | Ferramentas (esta) | Segurança Defensiva |
+| --- | --- | --- |
+| Verbos | rodar, ler a saída, configurar | escolher, priorizar, justificar |
+| Exemplo | Configura o firewall que isola a rede do caixa | Decide isolar a rede do caixa |
+
+Na prática, a decisão vem primeiro (Defensiva) e a execução vem depois (aqui), na mesma semana ou na seguinte. Uma depende da outra: não adianta saber configurar firewall sem saber o que proteger, nem decidir proteger algo sem saber como.
+
+## Como vamos trabalhar
+
+Tudo começa e termina em sala.
+
+- Toda aula prática tem uma **ficha em papel**, com **visto do professor** na hora.
+- **Faltou?** Refaz nos primeiros 20 minutos do encontro seguinte, valendo até 2 pontos.
+- **1ª etapa:** 6 fichas de 3 pontos mais um desafio prático de 12 pontos, total de 30 pontos.
+
+Este site é para estudar e praticar. Nada aqui vale nota.
+
+## O ano em três etapas
+
+### Etapa 1: enxergar a rede (outubro a dezembro)
+
+Antes de proteger, você precisa ver o que está ligado e o que está trafegando.
+
+| Data | Ferramenta | No trabalho |
+| --- | --- | --- |
+| 26/10 | Linha de comando: `ip`, `ping`, `traceroute`, `dig`, `tcpdump` | Cliente reclama que a internet está lenta |
+| 09/11 | Wireshark | Cliente reclama que a internet está lenta |
+| 16/11 | Nmap | Você assume a rede de uma clínica e ninguém sabe o que tem nela |
+| 30/11 | OpenVAS | A câmera da recepção ainda tem a senha de fábrica |
+| 14/12 | **Desafio prático em dupla** | Inventário e os 3 maiores riscos de uma rede desconhecida |
+
+### Etapa 2: controlar o tráfego (fevereiro e março)
+
+Depois de ver, você decide o que passa e o que não passa. Ferramentas: **ufw e nftables** e **pfSense** (fevereiro), **WireGuard** (março).
+
+No trabalho, isso vira coisas como:
+
+- liberar só a porta do sistema da clínica para a internet;
+- separar o Wi-Fi de visitante da rede do caixa;
+- deixar o dono acessar o servidor de casa sem abrir tudo para a internet (VPN).
+
+### Etapa 3: detectar e responder (março e abril)
+
+Nenhuma proteção é perfeita. Você precisa perceber quando alguém está tentando. Ferramentas: **Suricata** e **logs do Linux** (março), **Wazuh** (abril).
+
+Um exemplo do que você vai aprender a enxergar, num log de autenticação do servidor:
+
+```
+10:41:02 sshd: Failed password for admin from 203.0.113.50
+10:41:09 sshd: Failed password for admin from 203.0.113.50
+10:41:15 sshd: Failed password for admin from 203.0.113.50
+```
+
+Três senhas erradas em 13 segundos, da mesma origem. Com monitoramento, o técnico é avisado antes da quarta tentativa.
+
+### Projeto integrador (março e abril)
+
+Em grupos de 3 ou 4 alunos, vocês vão montar a rede de um **escritório fictício**: 10 estações, servidor de arquivos e Wi-Fi de visitantes, protegidos por um pfSense com segmentação, firewall, VPN para acesso remoto e Suricata alertando. Início em 01/03/2027 e entrega, funcionando, em 12/04/2027.
+
+## Mesma ferramenta, dois usos
+
+O comando é o mesmo. O que muda é a autorização.
+
+| | Cenário A: rede do cliente | Cenário B: rede do vizinho |
+| --- | --- | --- |
+| Quem | Técnico de redes | Técnico de redes |
+| Comando | `nmap -sn 192.168.0.0/24` | `nmap -sn 192.168.0.0/24` |
+| Dono da rede | Outra pessoa | Outra pessoa |
+| Autorização por escrito | **Sim**, contrato assinado | **Não**, ninguém pediu |
+| Resultado | **Trabalho** | **Crime** |
+
+Saber usar a ferramenta não te dá o direito de usar. Antes de varrer, capturar ou testar qualquer rede que não é sua, você precisa de **autorização de quem é dono dela**. Na vida profissional, deixe tudo **por escrito**: o que pode ser testado, quando e por quem. É esse papel que protege você se alguém questionar depois.
+
+## O que diz a lei
+
+Invadir dispositivo alheio sem autorização é crime no Brasil. Está no **art. 154-A do Código Penal**, criado em 2012 pela Lei 12.737 (conhecida como Lei Carolina Dieckmann) e alterado em 2021 pela Lei 14.155, que é a redação que vale hoje.
+
+| | 2012 (Lei 12.737) | Hoje (Lei 14.155/2021) |
+| --- | --- | --- |
+| Precisa violar um mecanismo de segurança? | Sim, era exigido | **Não.** Basta faltar autorização |
+| Pena básica | Detenção, 3 meses a 1 ano, e multa | **Reclusão, 1 a 4 anos, e multa** |
+| Obtém comunicações privadas, segredos ou controle remoto | Reclusão, 6 meses a 2 anos, e multa | **Reclusão, 2 a 5 anos, e multa** |
+| Houve prejuízo econômico | Pena aumenta de 1/6 a 1/3 | **Pena aumenta de 1/3 a 2/3** |
+
+A mudança mais importante para vocês está na primeira linha. Em 2012, o texto falava em invadir "mediante violação indevida de mecanismo de segurança". Esse trecho saiu em 2021. Hoje, entrar num dispositivo sem autorização já basta, mesmo que ele esteja sem senha.
+
+## Regras do nosso lab
+
+Tudo o que fizermos fica dentro desta caixa: a **rede interna do laboratório**, chamada `labseg`, onde ficam o Kali (quem testa) e a VM alvo (vulnerável de propósito).
+
+1. Varredura, captura e ataque simulado **só na rede interna do lab**, contra máquinas da turma.
+2. **Nunca** na rede ou no Wi-Fi da escola, **nunca** em alvo da internet.
+3. A VM alvo é vulnerável de propósito e **nunca** fica em modo bridge ou NAT. Ela não pode enxergar nada fora do lab.
+4. **Dúvida? Pergunte antes.**
+
+O aviso amarelo no topo de todo lab deste site repete a regra 1. Ele está lá de propósito.

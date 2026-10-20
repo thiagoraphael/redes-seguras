@@ -1,0 +1,150 @@
+---
+disciplina: defensiva
+encontro: 1
+data: 2026-10-19
+titulo: Conceitos base
+resumo: Como a disciplina funciona, o que vem no ano e o vocabulário que vamos usar o tempo todo. Tríade CIA, ativo, ameaça, vulnerabilidade e risco.
+liberado: true
+objetivos:
+  - Explicar a diferença entre esta disciplina e Ferramentas
+  - Dizer qual pilar da tríade CIA uma falha quebra
+  - Separar ativo, ameaça e vulnerabilidade numa situação real
+  - Explicar por que a mesma falha pode ter risco baixo num lugar e alto em outro
+lab:
+  - tipo: cenarios
+    dados: defensiva-01-cia
+    titulo: "Simulação: qual pilar quebrou?"
+    intro: Oito problemas na Clínica Patas & Cia. Coloque cada um no pilar da tríade CIA que ele quebra.
+  - tipo: cenarios
+    dados: exemplo-clinica-risco
+    titulo: "Simulação: ativo, ameaça, vulnerabilidade ou risco?"
+    intro: A mesma clínica, agora separando o vocabulário da aula.
+quiz: defensiva-01
+referencias:
+  - titulo: "NIST CSRC, Glossary: CIA"
+    url: https://csrc.nist.gov/glossary/term/CIA
+  - titulo: "NIST CSRC, Glossary: vulnerability"
+    url: https://csrc.nist.gov/glossary/term/vulnerability
+  - titulo: "NIST CSRC, Glossary: risk"
+    url: https://csrc.nist.gov/glossary/term/risk
+  - titulo: "CERT.br, Fascículos da Cartilha de Segurança para Internet"
+    url: https://cartilha.cert.br/fasciculos/
+  - titulo: "Cartilha de Segurança para Internet: fascículo Backup"
+    url: https://cartilha.cert.br/fasciculos/backup/fasciculo-backup.pdf
+  - titulo: "Veeam: O que é a regra 3-2-1 de backup?"
+    url: https://www.veeam.com/blog/pt/321-backup-rule.html
+---
+
+## Decidir antes de operar
+
+Esta disciplina anda junto com **Ferramentas de Segurança de Rede**, que acontece antes desta, no mesmo dia.
+
+| | Segurança Defensiva (esta) | Ferramentas |
+| --- | --- | --- |
+| Verbos | escolher, priorizar, justificar | rodar, ler a saída, configurar |
+| Exemplo | Decidir isolar a rede do caixa | Configurar o firewall que isola |
+
+É ida e volta: aqui você decide o que proteger e por quê. Em Ferramentas, você executa. Uma decisão sem execução fica no papel. Uma execução sem decisão protege a coisa errada.
+
+## Como vamos trabalhar
+
+Tudo começa e termina em sala.
+
+- **Formato:** atividade em papel, em dupla ou trio.
+- **Entrega:** visto do professor na hora.
+- **Faltou?** Refaz nos primeiros 20 minutos do encontro seguinte, valendo até 2 pontos.
+- **1ª etapa:** 5 atividades de 3 pontos mais um seminário de 15 pontos. O tema do seminário é sorteado no encontro 5.
+
+Este site é para estudar e praticar. Nada aqui vale nota.
+
+## O ano em três etapas
+
+### Etapa 1: conhecer o adversário (outubro e novembro)
+
+Não dá para se defender do que você não conhece. Vamos estudar tipos de ataque e malware, engenharia social e golpes por WhatsApp, Pix e e-mail.
+
+No dia a dia, é o parente que clicou no link do "pacote retido". Uma mensagem assim tem quase sempre os mesmos sinais:
+
+> Olá! Sua encomenda está retida por falta de pagamento da taxa de entrega. **Regularize até hoje às 18h** ou ela será devolvida. **entrega-taxa.top/r8x2** **Valor: R$ 19,90 via Pix**
+
+1. **Urgência:** "até hoje às 18h".
+2. **Link estranho:** não é o site oficial de nenhuma empresa.
+3. **Pede dinheiro:** e ainda por Pix, que cai na hora.
+
+Leitura indicada: os [fascículos do CERT.br sobre golpes](https://cartilha.cert.br/fasciculos/).
+
+### Etapa 2: proteger (novembro a março)
+
+Proteger é empilhar camadas, não comprar uma solução mágica. Essa ideia se chama **defesa em profundidade**: se uma camada falha, a próxima ainda segura.
+
+| Camada | O que protege | Exemplos |
+| --- | --- | --- |
+| C1 | Política de segurança | Regras escritas |
+| C2 | Rede | Segmentação |
+| C3 | Estações e servidores | Hardening, atualizações |
+| C4 | Acesso | Senhas, MFA (verificação em duas etapas) |
+| C5 | Dados | Criptografia, backup 3-2-1 |
+
+No centro de tudo fica o que você quer proteger, por exemplo o **cadastro de clientes**.
+
+Dois casos para treinar o olho, perguntando "qual camada faltou?":
+
+- **Roteador da operadora com a senha de fábrica.** Faltou **hardening** (C3): ajustar a configuração padrão de um equipamento para deixá-lo mais seguro, começando por trocar a senha.
+- **Clínica que perdeu o prontuário porque o único backup estava no mesmo HD.** Faltou **backup 3-2-1** (C5): 3 cópias dos dados, em 2 tipos de mídia diferentes, com 1 delas fora do local. A Cartilha do CERT.br vai na mesma linha: pelo menos 2 cópias, em locais diferentes, e mídias que não ficam conectadas o tempo todo.
+
+### Etapa 3: quando dá errado (março e abril)
+
+Incidente vai acontecer. A diferença está na primeira hora. Imagine a tela de resgate aparecendo na recepção, com os arquivos criptografados. Nos primeiros 60 minutos, a ordem é:
+
+1. **Isolar:** tirar a máquina da rede para o problema não se espalhar.
+2. **Avisar:** quem precisa saber, dentro e fora da empresa.
+3. **Preservar evidência:** não apagar nem formatar nada antes de registrar o que aconteceu.
+
+Os temas dessa etapa são monitoramento, resposta a incidentes, forense básica, LGPD e ISO 27001. No **projeto integrador**, vocês escrevem a política de segurança, o plano de backup e o plano de resposta a incidente do escritório que a turma protege em Ferramentas.
+
+## A tríade CIA
+
+Toda falha de segurança quebra pelo menos um destes três pilares. A sigla vem do inglês (Confidentiality, Integrity, Availability) e é usada pelo NIST, o instituto de padrões dos Estados Unidos. Em português aparece também como **CID**.
+
+Pense no prontuário de um animal na clínica veterinária:
+
+| Pilar | O que garante | Quando quebra | Na clínica |
+| --- | --- | --- | --- |
+| **C**onfidencialidade | Só quem deve vê | **Exposto:** visto por quem não devia | A ficha do animal, com telefone e endereço do tutor, vaza num grupo |
+| **I**ntegridade | A informação está correta e não foi alterada sem permissão | **Alterado** | O peso do animal muda de 32 kg para 3,2 kg no sistema e a dose do remédio sai errada |
+| **D**isponibilidade | A informação está acessível quando é preciso | **Inacessível:** existe, mas ninguém abre | O sistema cai no sábado da campanha de vacinação |
+
+Repare que integridade não é só ataque: um erro de digitação também quebra a integridade. E disponibilidade não é só DDoS: queda de energia sem nobreak também.
+
+## Ativo, ameaça e vulnerabilidade
+
+Três palavras que vamos usar em toda aula:
+
+- **Ativo:** o que tem valor. O cadastro de clientes, o servidor, a reputação da clínica.
+- **Ameaça:** o que pode causar dano. Golpista, ransomware, enchente, funcionário distraído.
+- **Vulnerabilidade:** a fraqueza que deixa a ameaça agir. O NIST define como uma fraqueza num sistema, num procedimento ou na forma como algo foi implementado, que pode ser explorada por uma ameaça.
+
+A ameaça você quase nunca controla. A vulnerabilidade sim.
+
+| | Ameaça | Vulnerabilidade | Ativo |
+| --- | --- | --- | --- |
+| Caminho aberto | Golpista | Senha `123456` | Cadastro de clientes: **atingido** |
+| Caminho fechado | Golpista | Senha forte + MFA | Cadastro de clientes: **intacto** |
+
+A ameaça continua lá. O que mudou foi o caminho até o ativo.
+
+## Risco
+
+Risco junta **a chance de acontecer** com **o tamanho do estrago** (impacto). O NIST descreve risco como uma combinação do impacto que um evento pode causar com a probabilidade de ele ocorrer.
+
+Compare dois computadores da clínica com o mesmo problema:
+
+| | A: PC que toca música na recepção | B: PC do financeiro |
+| --- | --- | --- |
+| Ameaça | Acesso indevido pela rede | Acesso indevido pela rede |
+| Vulnerabilidade | Senha `123456` | Senha `123456` |
+| Chance | Alta | Alta |
+| Impacto | Baixo | Muito alto |
+| **Risco** | **Baixo** | **Alto** |
+
+Mesma senha, mesma ameaça. Só o impacto mudou. É por isso que, com tempo e dinheiro limitados, o técnico começa pelo PC do financeiro. Priorizar pelo risco é a decisão que esta disciplina treina.
